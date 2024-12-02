@@ -1,11 +1,11 @@
-import { Board, GameState } from '@/server/gameTypes';
-import { View } from 'react-native';
-import Cell from './Cell';
+import { Board, GameState } from '@/server/gameTypes'
+import { View } from 'react-native'
+import Cell from './Cell'
 
 interface Props {
-  board: Board;
-  isDisabled: boolean;
-  onMove: (row: number, col: number) => void;
+  board: Board
+  isDisabled: boolean
+  onMove: (row: number, col: number) => void
 }
 export default function BoardComponent({ board, onMove, isDisabled }: Props) {
   return (
@@ -23,11 +23,11 @@ export default function BoardComponent({ board, onMove, isDisabled }: Props) {
                   value={cell.value}
                   win={cell.winState}
                 />
-              );
+              )
             })}
           </View>
-        );
+        )
       })}
     </View>
-  );
+  )
 }

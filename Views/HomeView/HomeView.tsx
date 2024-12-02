@@ -1,15 +1,16 @@
 import { ThemedView } from '@/components/ThemedView'
-import { WS_URL } from '@/server/constants'
+import { ClientMessageType, JoinGameInviteMessage } from '@/server/messageTypes'
 import { useGlobalStore } from '@/stores/globalStore'
+import { useHeaderHeight } from '@react-navigation/elements'
 import React, { useEffect, useState } from 'react'
-import { Platform, StyleSheet, View } from 'react-native'
+import { Button, Platform, StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import HomeViewFooter from './components/HomeViewFooter'
+import { WS_URL } from '@/server/constants'
 import HomeViewBody from './components/HomeViewBody'
-import { useHeaderHeight } from '@react-navigation/elements'
 
 export default function HomeView() {
-  const { ws, createWSConnection, preferences } = useGlobalStore()
+  const { ws, createWSConnection } = useGlobalStore()
   const insets = useSafeAreaInsets()
   const [isConnecting, setIsConnecting] = useState(false)
   const headerHeight = useHeaderHeight()
@@ -29,14 +30,7 @@ export default function HomeView() {
 
   return (
     <ThemedView style={{ flex: 1, paddingTop: insets.top + headerHeight, justifyContent: 'flex-start', alignItems: 'center' }}>
-      {/* <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-        <View style={{ marginBottom: 6 }}>
-          <Avatar size={40} avatar={preferences.preferedAvatar} />
-        </View>
-        <ThemedText type="title">{preferences.displayName}</ThemedText>
-      </View>
-      <ThemedText type="subtitle">TicTacToe Plus</ThemedText> */}
-      <View style={{ flex: 2, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+      <View style={{ flex: 3, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
         <HomeViewBody />
       </View>
       <View style={[styles.footer, { paddingBottom: Platform.select({ android: insets.bottom + 32, ios: insets.bottom }) }]}>

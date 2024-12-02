@@ -1,10 +1,15 @@
+import IconButton from '@/components/ui/buttons/IconButton'
+import PrimaryButton from '@/components/ui/buttons/PrimaryButton'
+import SecondaryButton from '@/components/ui/buttons/SecondaryButton'
+import BackIcon from '@/components/ui/icons/BackIcon'
 import UIButton from '@/components/ui/UIButton'
 import { WS_URL } from '@/server/constants'
-import { RequestGameMessage } from '@/server/messageTypes'
+import { ClientMessageType, CreateGameInviteMessage, RequestGameMessage } from '@/server/messageTypes'
 import { useGlobalStore } from '@/stores/globalStore'
+import { WINDOW_WIDTH } from '@gorhom/bottom-sheet'
 import { router } from 'expo-router'
-import { Dispatch, SetStateAction } from 'react'
-import { Alert, Platform, Text } from 'react-native'
+import { Dispatch, SetStateAction, useEffect } from 'react'
+import { Alert, Platform, Text, View } from 'react-native'
 
 interface Props {
   isConnecting: boolean
@@ -13,8 +18,17 @@ interface Props {
 
 export default function HomeViewFooter({ isConnecting, setIsConnecting }: Props) {
   const ws = useGlobalStore(s => s.ws)
+  const createWSConnection = useGlobalStore(s => s.createWSConnection)
+
+  // useEffect(() => {
+  //   if (!ws) createWSConnection()
+  // }, [])
 
   function retryConnection() {
+    if (!ws) {
+      createWSConnection()
+      return
+    }
     setIsConnecting(true)
     if (ws) {
       ws.connect(WS_URL)
@@ -56,17 +70,23 @@ export default function HomeViewFooter({ isConnecting, setIsConnecting }: Props)
     }
   }
 
+  function createInviteGame() {
+    const mg: CreateGameInviteMessage = {
+      type: ClientMessageType.CREATE_INVITE_GAME,
+    }
+    if (ws) {
+      ws.sendMessage(mg)
+    }
+  }
+
   if (ws?.getReadyState() !== WebSocket.OPEN) {
-    return (
-      <UIButton onPress={retryConnection} isLoading={isConnecting} wide>
-        <Text style={{ color: 'white' }}>{isConnecting ? 'connecting' : 'connect'}</Text>
-      </UIButton>
-    )
+    return <PrimaryButton onPress={retryConnection} isLoading={isConnecting} wide label={isConnecting ? 'Connecting' : 'Connect'} />
   }
 
   return (
-    <UIButton onPress={playGame} wide>
-      <Text style={{ color: 'white' }}>Play</Text>
-    </UIButton>
+    <View style={{ width: '50%', gap: 20 }}>
+      <PrimaryButton onPress={playGame} label="Play online" />
+      <SecondaryButton onPress={createInviteGame} label="Play with a friend" />
+    </View>
   )
 }

@@ -1,30 +1,77 @@
-import { StyleSheet, Text, useColorScheme, View } from 'react-native';
-import React, { useEffect } from 'react';
-import Cell from './Cell';
-import { Mark, RowMark } from '@/server/gameTypes';
-import { usePathInterpolation } from '@shopify/react-native-skia';
-import { valueToNumber } from '../utils';
-import { useSharedValue, withTiming } from 'react-native-reanimated';
-import { solidCirclePath, dashedCirclePath, xPath } from './constants';
+import { RowMark } from '@/server/gameTypes'
+import React, { useEffect } from 'react'
+import { Pressable, StyleSheet, useColorScheme } from 'react-native'
+import { SIZE } from './constants'
+import OCell from './OCell'
+import XCell from './XCell'
+import { PrimaryColors } from '@/constants/Colors'
+import { AnimatedPressable } from '@/components/ui/buttons/constants'
+import { interpolateColor, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 
 interface Props {
-  value: RowMark;
-  onPress: () => void;
-  win: boolean;
-  lives: number;
-  isDisabled: boolean;
+  value: RowMark
+  onPress: () => void
+  win: boolean
+  lives: number
+  isDisabled: boolean
 }
+
 export default function CellContainer({ lives, onPress, value, win, isDisabled }: Props) {
-  const theme = useColorScheme();
-  const progress = useSharedValue(valueToNumber[value]);
-  const interpolatedPath = usePathInterpolation(progress, [0, 0.5, 1], [solidCirclePath, dashedCirclePath, xPath]);
+  const theme = useColorScheme() ?? 'light'
+  const val = useSharedValue(1)
+  const animatedStyle = useAnimatedStyle(() => ({
+    borderColor: win
+      ? interpolateColor(
+          val.value,
+          [0, 1, 2],
+          [PrimaryColors[theme].x.primary, PrimaryColors[theme]['-'].primary, PrimaryColors[theme].o.primary]
+        )
+      : PrimaryColors[theme]['-'].primary,
+  }))
 
   useEffect(() => {
-    progress.value = withTiming(valueToNumber[value]);
-  }, [value]);
+    val.value = withTiming(valueToNumber[value])
+  }, [value])
 
-  const color = win ? 'blue' : lives === 0 ? 'red' : theme === 'dark' ? 'white' : 'black';
-  return <Cell path={interpolatedPath} color={color} onPress={onPress} isDisabled={isDisabled} />;
+  return (
+    <AnimatedPressable
+      onPress={() => {
+        onPress()
+      }}
+      style={[{ backgroundColor: win ? PrimaryColors[theme][value].shadow : 'transparent' }, animatedStyle, styles.container]}
+    >
+      <Cell lives={lives} value={value} />
+    </AnimatedPressable>
+  )
 }
 
-const styles = StyleSheet.create({});
+function Cell({ lives, value }: { lives: number; value: RowMark }) {
+  switch (value) {
+    case 'o': {
+      return <OCell dying={lives === 0} containerSize={50} />
+    }
+    case 'x': {
+      return <XCell dying={lives === 0} containerSize={50} />
+    }
+
+    default: {
+      return null
+    }
+  }
+}
+
+const styles = StyleSheet.create({
+  container: {
+    margin: 4,
+    width: SIZE,
+    height: SIZE,
+    borderWidth: 2,
+    borderRadius: 4,
+  },
+})
+
+const valueToNumber = {
+  x: 0,
+  '-': 1,
+  o: 2,
+}

@@ -2,8 +2,10 @@ import avatarsMap from '@/assets/characters/avatarsMap'
 import { Board, GameState, Mark } from '@/server/gameTypes'
 import {
   ClientMessageType,
+  CreateGameInviteMessage,
   ErrorMessage,
   GameOverMessage,
+  InviteGameCreatedMessage,
   MoveMessage,
   ServerMessage,
   ServerMessageType,
@@ -32,6 +34,7 @@ interface StoreType {
   gameWinner: SafeIdentity | null
   error: string | null
   preferences: Preferences
+  gameID: string | null
 
   createWSConnection: () => void
   setWsHandler: (wsHandler: WebSocketHandler) => void
@@ -59,6 +62,7 @@ export const useGlobalStore = create<StoreType>()((set, get) => ({
     displayName: '',
     preferedAvatar: 'unknown',
   },
+  gameID: null,
 
   //actions
   setPreferences(preferences) {
@@ -164,7 +168,15 @@ export const useGlobalStore = create<StoreType>()((set, get) => ({
                 activePlayer: content.activePlayer,
                 gameState: GameState.PLAYING,
                 opponentIdentity: content.oponent,
+                gameID: content.gameID,
               })
+              router.replace('/game')
+              break
+            }
+            case ServerMessageType.INVITE_GAME_CREATED: {
+              const { content } = message as InviteGameCreatedMessage
+              set({ gameID: content.gameID })
+              router.replace(`/invite-game/lobby`)
               break
             }
             case ServerMessageType.UPDATE: {

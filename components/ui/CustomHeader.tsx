@@ -6,14 +6,14 @@ import { Platform, useColorScheme } from 'react-native'
 import { Colors } from '@/constants/Colors'
 import { useGlobalStore } from '@/stores/globalStore'
 import Avatar from './Avatar'
+import BackButton from './buttons/BackButton'
+import SettingsButton from './buttons/SettingsButton'
 
 interface Props {
-  left?: ReactNode
   hideLeft?: boolean
-  right?: ReactNode
   hideRight?: boolean
 }
-export default function CustomHeader({ left, hideLeft = false, right, hideRight = false }: Props) {
+export default function CustomHeader({ hideLeft = false, hideRight = false }: Props) {
   return (
     <Stack.Screen
       options={{
@@ -22,12 +22,10 @@ export default function CustomHeader({ left, hideLeft = false, right, hideRight 
         title: '',
         headerRight: () => {
           if (hideRight) return null
-          if (right) return right
           return <DefaultRightButton />
         },
         headerLeft: () => {
           if (hideLeft) return null
-          if (left) return left
           return <DefaultLeftButton />
         },
       }}
@@ -36,26 +34,9 @@ export default function CustomHeader({ left, hideLeft = false, right, hideRight 
 }
 
 function DefaultRightButton() {
-  const { preferences } = useGlobalStore()
-  return (
-    <IconButton
-      rotate
-      onPress={() => {
-        router.replace('/settings')
-      }}
-      style={{ width: 48, height: 48, alignItems: 'center', justifyContent: 'center' }}
-    >
-      <Avatar avatar={preferences.preferedAvatar} size={32} />
-    </IconButton>
-  )
+  return <SettingsButton />
 }
 
 function DefaultLeftButton() {
-  const theme = useColorScheme()
-
-  return (
-    <IconButton onPress={() => router.replace('/')} style={{ width: 48, height: 48, alignItems: 'center', justifyContent: 'center' }}>
-      <IconSymbol name="chevron.left" size={Platform.select({ ios: 20, android: 32 })} color={Colors[theme ?? 'light'].primary} />
-    </IconButton>
-  )
+  return <BackButton />
 }

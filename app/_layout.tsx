@@ -26,7 +26,7 @@ export default function RootLayout() {
   const colorScheme = useColorScheme()
   const navBarVisibliity = NavigationBar.useVisibility()
   const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    babek: require('../assets/fonts/BakbakOne-Regular.ttf'),
   })
 
   useEffect(() => {
@@ -102,8 +102,10 @@ function Layout() {
       <GestureHandlerRootView>
         <Stack>
           <Stack.Screen name="index" options={{ animationTypeForReplace: 'pop' }} />
+          <Stack.Screen name="home" options={{ animationTypeForReplace: 'pop' }} />
           <Stack.Screen name="game" options={{ headerShown: false, presentation: 'fullScreenModal' }} />
           <Stack.Screen name="settings" options={{ presentation: 'fullScreenModal' }} />
+          <Stack.Screen name="invite-game" options={{ headerShown: false, animation: 'slide_from_bottom' }} />
         </Stack>
       </GestureHandlerRootView>
       <StatusBar style="auto" />

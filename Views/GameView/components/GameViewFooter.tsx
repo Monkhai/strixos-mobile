@@ -1,3 +1,6 @@
+import DangerButton from '@/components/ui/buttons/DangerButton'
+import PrimaryButton from '@/components/ui/buttons/PrimaryButton'
+import SecondaryButton from '@/components/ui/buttons/SecondaryButton'
 import { TextButton } from '@/components/ui/UIButton'
 import { GameState } from '@/server/gameTypes'
 import { ClientMessageType } from '@/server/messageTypes'
@@ -35,20 +38,18 @@ export default function GameViewFooter() {
     case GameState.OPPONENT_DISCONNECTED: {
       return (
         <View style={styles[GameState.OPPONENT_DISCONNECTED]}>
-          <TextButton
+          <PrimaryButton
             onPress={() => {
               ws?.sendMessage({ type: ClientMessageType.GAME_REQUEST })
             }}
             wide
-            type="primary"
             label="One more"
           />
-          <TextButton
+          <SecondaryButton
             onPress={() => {
               router.replace('/')
             }}
             wide
-            type="secondary"
             label="Back home"
           />
         </View>
@@ -58,12 +59,11 @@ export default function GameViewFooter() {
     case GameState.PLAYING: {
       return (
         <View>
-          <TextButton
+          <DangerButton
             onPress={() => {
               ws?.sendMessage({ type: ClientMessageType.LEAVE_GAME })
             }}
             label="Leave"
-            type="danger"
           />
         </View>
       )
@@ -72,12 +72,11 @@ export default function GameViewFooter() {
     case GameState.WAITING: {
       return (
         <View>
-          <TextButton
+          <DangerButton
             onPress={() => {
               ws?.sendMessage({ type: ClientMessageType.LEAVE_QUEUE })
             }}
             label="Exit Queue"
-            type="danger"
           />
         </View>
       )
@@ -96,8 +95,7 @@ const styles = StyleSheet.create({
     width: '50%',
   },
   [GameState.OPPONENT_DISCONNECTED]: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: 'column',
     alignItems: 'center',
     gap: 20,
     width: '50%',

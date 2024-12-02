@@ -1,10 +1,11 @@
-import { Colors } from '@/constants/Colors'
+import { Colors, PrimaryColors } from '@/constants/Colors'
+import { Canvas, LinearGradient, Rect } from '@shopify/react-native-skia'
 import { impactAsync, ImpactFeedbackStyle } from 'expo-haptics'
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useLayoutEffect, useRef } from 'react'
 import { GestureResponderEvent, Pressable, PressableProps, StyleSheet, Text, useColorScheme, View } from 'react-native'
-import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
+import { Gesture, GestureDetector } from 'react-native-gesture-handler'
+import Animated, { useAnimatedStyle, useDerivedValue, useSharedValue, withTiming } from 'react-native-reanimated'
 import Loader from './Loader'
-import { Gesture, GestureDetector, RectButton } from 'react-native-gesture-handler'
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
@@ -27,8 +28,11 @@ export default function UIButton({
   children,
   ...props
 }: Props) {
-  const theme = useColorScheme()
+  const theme = useColorScheme() ?? 'light'
   const scale = useSharedValue(1)
+  const h = useSharedValue(0)
+  const w = useSharedValue(0)
+  const ref = useRef<View>(null)
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -38,6 +42,7 @@ export default function UIButton({
 
   const styles = StyleSheet.create({
     base: {
+      overflow: 'hidden',
       padding: 16,
       borderRadius: 8,
       alignItems: 'center',
@@ -75,8 +80,18 @@ export default function UIButton({
     },
   }
 
+  useLayoutEffect(() => {
+    if (ref.current) {
+      ref.current.measure((x, y, width, height) => {
+        h.value = height
+        w.value = width
+      })
+    }
+  }, [])
+
   return (
     <AnimatedPressable
+      ref={ref}
       onPressIn={() => {
         impactAsync(ImpactFeedbackStyle.Light)
         scale.value = withTiming(0.95)
@@ -87,6 +102,15 @@ export default function UIButton({
       style={[animatedStyle, typedStyles[type], style]}
       {...props}
     >
+      <Canvas style={{ position: 'absolute', width: w.get(), height: h.get() }}>
+        <Rect height={h} width={w} x={0} y={0} style={'fill'} color={'white'}>
+          <LinearGradient
+            colors={[PrimaryColors[theme].x.primary, PrimaryColors[theme].o.primary]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 100, y: 0 }}
+          />
+        </Rect>
+      </Canvas>
       <>{children}</>
       <View style={{ position: 'absolute', right: 20 }}>{isLoading ? <Loader size={24} /> : suffix}</View>
     </AnimatedPressable>
@@ -94,7 +118,8 @@ export default function UIButton({
 }
 
 export function TextButton({ label, type = 'primary', ...props }: Props & { label: string }) {
-  const theme = useColorScheme()
+  const theme = useColorScheme() ?? 'light'
+  const size = useSharedValue({ width: 0, height: 0 })
   const styles = StyleSheet.create({
     primary: {
       color: 'white',
@@ -121,6 +146,15 @@ export function TextButton({ label, type = 'primary', ...props }: Props & { labe
       >
         {label}
       </Text>
+      <Canvas style={{ position: 'absolute', width: '100%', height: '100%' }} onSize={size}>
+        <Rect height={size.value.height} width={size.value.height}>
+          <LinearGradient
+            colors={[PrimaryColors[theme].x.primary, PrimaryColors[theme].o.primary]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 100, y: 0 }}
+          />
+        </Rect>
+      </Canvas>
     </UIButton>
   )
 }

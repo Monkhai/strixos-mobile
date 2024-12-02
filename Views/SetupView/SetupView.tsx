@@ -31,6 +31,7 @@ export default function SetupView() {
 
   useLayoutEffect(() => {
     if (preferences) {
+      router.replace('/')
     }
   }, [preferences])
 
@@ -112,7 +113,7 @@ const styles = StyleSheet.create({
       ios: 12,
     }),
     paddingVertical: Platform.select({
-      android: 0,
+      android: 12,
       ios: 12,
     }),
     flexDirection: 'row',

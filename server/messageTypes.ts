@@ -7,6 +7,9 @@ export enum ClientMessageType {
   LEAVE_GAME = 'leaveGame',
   LEAVE_QUEUE = 'leaveQueue',
   UPDATE_IDENTITY = 'updateIdentity',
+  CREATE_INVITE_GAME = 'createInviteGame',
+  JOIN_INVITE_GAME = 'joinInviteGame',
+  LEAVE_INVITE_GAME = 'leaveInviteGame',
 }
 
 export enum ServerMessageType {
@@ -23,6 +26,8 @@ export enum ServerMessageType {
   // Register Flow
   AUTH_IDENTITY = 'authIdentity',
   REGISTERED = 'registered',
+  // Invite Game
+  INVITE_GAME_CREATED = 'inviteGameCreated',
 }
 
 export interface BaseMessage {
@@ -40,14 +45,23 @@ export interface GameRequestMessage extends ClientMessage {
 export const RequestGameMessage: GameRequestMessage = {
   type: ClientMessageType.GAME_REQUEST,
 }
-
+export interface JoinGameInviteMessage extends ClientMessage {
+  type: ClientMessageType.JOIN_INVITE_GAME
+  gameID: string
+}
+export interface CreateGameInviteMessage extends ClientMessage {
+  type: ClientMessageType.CREATE_INVITE_GAME
+}
+export interface LeaveInviteGameMessage extends ClientMessage {
+  type: ClientMessageType.LEAVE_INVITE_GAME
+  gameID: string
+}
 export interface UpdateIdentityMessage extends ClientMessage {
   type: ClientMessageType.UPDATE_IDENTITY
   content: {
     identity: Identity
   }
 }
-
 export interface MoveMessage extends ClientMessage {
   type: ClientMessageType.MOVE
   content: {
@@ -56,7 +70,6 @@ export interface MoveMessage extends ClientMessage {
     mark: string
   }
 }
-
 export const LeaveGameMessage: ClientMessage = {
   type: ClientMessageType.LEAVE_GAME,
 }
@@ -73,6 +86,13 @@ export interface CloseMessage extends ServerMessage {
   reason: string
 }
 
+export interface InviteGameCreatedMessage extends ServerMessage {
+  type: ServerMessageType.INVITE_GAME_CREATED
+  content: {
+    gameID: string
+  }
+}
+
 export interface StartGameMessage extends ServerMessage {
   type: ServerMessageType.START_GAME
   content: {
@@ -80,6 +100,7 @@ export interface StartGameMessage extends ServerMessage {
     mark: Mark
     activePlayer: SafeIdentity
     oponent: SafeIdentity
+    gameID: string
   }
 }
 

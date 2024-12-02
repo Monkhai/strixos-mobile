@@ -1,10 +1,9 @@
+import { GameState } from '@/server/gameTypes'
 import { useGlobalStore } from '@/stores/globalStore'
 import { router } from 'expo-router'
-import React, { useEffect } from 'react'
+import React from 'react'
 import LoadingGameView from './components/LoadingGameView/LoadingGameView'
 import GameView from './GameView'
-import { GameState } from '@/server/gameTypes'
-import FakeGameView from './components/FakeGameView'
 
 export default function GameViewContainer() {
   const { ws, gameState } = useGlobalStore()
