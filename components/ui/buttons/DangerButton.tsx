@@ -2,7 +2,7 @@ import { PrimaryColors } from '@/constants/Colors'
 import { Canvas, LinearGradient, Paragraph, RoundedRect, Skia, SkParagraphStyle, TextAlign, TileMode } from '@shopify/react-native-skia'
 import { impactAsync, ImpactFeedbackStyle } from 'expo-haptics'
 import { useMemo } from 'react'
-import { useColorScheme, View } from 'react-native'
+import { Platform, useColorScheme, View } from 'react-native'
 import { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 import { useElementDimensions } from '../hooks/useElementDImensions'
 import Loader from '../Loader'
@@ -23,7 +23,7 @@ export default function DangerButton({
   const scale = useSharedValue(1)
   const { h, w, ref } = useElementDimensions()
 
-  const styles = useMemo(() => getButtonBaseStyle(fullWidth, wide, props.disabled), [fullWidth, wide, props.disabled])
+  const styles = useMemo(() => getButtonBaseStyle(props.disabled), [fullWidth, wide, props.disabled])
   const animatedStyle = useAnimatedStyle(() => {
     return {
       transform: [{ scale: scale.value }],
@@ -48,6 +48,7 @@ export default function DangerButton({
     .pushStyle(
       {
         fontSize: 17,
+        letterSpacing: 1,
         fontStyle: { weight: 600 },
         color: Skia.Color('white'),
       },
@@ -78,7 +79,15 @@ export default function DangerButton({
             end={{ x: w * 1.5, y: 0 }}
           />
         </RoundedRect>
-        <Paragraph paragraph={paragraph} x={0} y={h / 3} width={w} />
+        <Paragraph
+          paragraph={paragraph}
+          x={0}
+          y={Platform.select({
+            ios: h / 3,
+            default: h / 3.5,
+          })}
+          width={w}
+        />
       </Canvas>
       <View style={{ position: 'absolute', right: 20 }}>{isLoading ? <Loader size={24} /> : suffix}</View>
     </AnimatedPressable>

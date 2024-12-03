@@ -1,7 +1,7 @@
 import { PrimaryColors } from '@/constants/Colors'
 import { Canvas, LinearGradient, Paragraph, RoundedRect, Skia, TextAlign } from '@shopify/react-native-skia'
 import { impactAsync, ImpactFeedbackStyle } from 'expo-haptics'
-import { useColorScheme, View } from 'react-native'
+import { Platform, useColorScheme, View } from 'react-native'
 import { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 import { useElementDimensions } from '../hooks/useElementDImensions'
 import Loader from '../Loader'
@@ -27,11 +27,12 @@ export default function PrimaryButton({
       transform: [{ scale: scale.value }],
     }
   })
-  const styles = getButtonBaseStyle(fullWidth, wide, props.disabled)
+  const styles = getButtonBaseStyle(props.disabled)
 
   const paragraph = Skia.ParagraphBuilder.Make({ textAlign: TextAlign.Center })
     .pushStyle({
       fontSize: 17,
+      letterSpacing: 1,
       fontStyle: { weight: 600 },
       color: Skia.Color('white'),
     })
@@ -60,7 +61,15 @@ export default function PrimaryButton({
             end={{ x: w * 1.5, y: 0 }}
           />
         </RoundedRect>
-        <Paragraph paragraph={paragraph} x={0} y={h / 3} width={w} />
+        <Paragraph
+          paragraph={paragraph}
+          x={0}
+          y={Platform.select({
+            ios: h / 3,
+            default: h / 3.5,
+          })}
+          width={w}
+        />
       </Canvas>
       <>{children}</>
       <View style={{ position: 'absolute', right: 20 }}>{isLoading ? <Loader size={24} /> : suffix}</View>

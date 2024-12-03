@@ -9,7 +9,7 @@
 - [ ] ?? allow theme switching from blue to orange
 - [ ] Styling
   - [x] create a header body footer shape that all pages can use
-  - [ ] on android, new buttons text is not centered
+  - [x] on android, new buttons text is not centered
     - [x] Home Page
       - [x] use screen template
       - [x] fill in the home page body
