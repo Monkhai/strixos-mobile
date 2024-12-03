@@ -1,11 +1,5 @@
-import { router, Stack } from 'expo-router'
-import React, { ReactNode } from 'react'
-import { IconSymbol } from './IconSymbol'
-import { IconButton } from './UIButton'
-import { Platform, useColorScheme } from 'react-native'
-import { Colors } from '@/constants/Colors'
-import { useGlobalStore } from '@/stores/globalStore'
-import Avatar from './Avatar'
+import { Stack } from 'expo-router'
+import React from 'react'
 import BackButton from './buttons/BackButton'
 import SettingsButton from './buttons/SettingsButton'
 
