@@ -99,7 +99,7 @@ export interface StartGameMessage extends ServerMessage {
     board: Board
     mark: Mark
     activePlayer: SafeIdentity
-    oponent: SafeIdentity
+    opponent: SafeIdentity
     gameID: string
   }
 }

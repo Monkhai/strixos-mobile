@@ -167,7 +167,7 @@ export const useGlobalStore = create<StoreType>()((set, get) => ({
                 mark: content.mark,
                 activePlayer: content.activePlayer,
                 gameState: GameState.PLAYING,
-                opponentIdentity: content.oponent,
+                opponentIdentity: content.opponent,
                 gameID: content.gameID,
               })
               router.replace('/game')

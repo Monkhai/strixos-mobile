@@ -3,7 +3,7 @@ import { useGlobalStore } from '@/stores/globalStore'
 import React from 'react'
 import Board from './components/Board/Board'
 import GameViewFooter from './components/GameViewFooter'
-import GameViewHeader from './components/GameViewHeader'
+import GameViewHeader from './components/GameViewHeader/GameViewHeader'
 
 export default function GameView() {
   const { activePlayer, identity, board, sendMove, gameState } = useGlobalStore()

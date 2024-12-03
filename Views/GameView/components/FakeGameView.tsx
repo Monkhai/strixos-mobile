@@ -1,10 +1,10 @@
-import { ThemedView } from '@/components/ThemedView';
-import React from 'react';
-import { View } from 'react-native';
-import Board from './Board/Board';
-import { getEmptyBoard } from './Board/utils';
-import GameViewFooter from './GameViewFooter';
-import GameViewHeader from './GameViewHeader';
+import { ThemedView } from '@/components/ThemedView'
+import React from 'react'
+import { View } from 'react-native'
+import Board from './Board/Board'
+import { getEmptyBoard } from './Board/utils'
+import GameViewFooter from './GameViewFooter'
+import GameViewHeader from './GameViewHeader/GameViewHeader'
 
 export default function FakeGameView() {
   return (
@@ -19,5 +19,5 @@ export default function FakeGameView() {
         <GameViewFooter />
       </View>
     </ThemedView>
-  );
+  )
 }

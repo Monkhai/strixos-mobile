@@ -1,7 +1,7 @@
 import { Colors } from '@/constants/Colors'
 import { Canvas, LinearGradient, Oval, Path, Shadow, Skia, usePathInterpolation, vec } from '@shopify/react-native-skia'
 import React, { useMemo } from 'react'
-import Animated, { SharedValue, useAnimatedStyle, useDerivedValue } from 'react-native-reanimated'
+import { SharedValue, useDerivedValue } from 'react-native-reanimated'
 
 interface Props {
   containerSize?: number

@@ -16,20 +16,18 @@ export default function GameViewFooter() {
     case GameState.FINISHED: {
       return (
         <View style={styles[GameState.FINISHED]}>
-          <TextButton
+          <PrimaryButton
             onPress={() => {
               ws?.sendMessage({ type: ClientMessageType.GAME_REQUEST })
             }}
             wide
-            type="primary"
             label="One more"
           />
-          <TextButton
+          <SecondaryButton
             onPress={() => {
               router.replace('/')
             }}
             wide
-            type="secondary"
             label="Back home"
           />
         </View>
@@ -88,16 +86,15 @@ export default function GameViewFooter() {
 
 const styles = StyleSheet.create({
   [GameState.FINISHED]: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: 'column',
     alignItems: 'center',
     gap: 20,
-    width: '50%',
+    width: '100%',
   },
   [GameState.OPPONENT_DISCONNECTED]: {
     flexDirection: 'column',
     alignItems: 'center',
     gap: 20,
-    width: '50%',
+    width: '100%',
   },
 })
