@@ -1,8 +1,7 @@
-import { View, Text, PressableProps } from 'react-native'
-import React from 'react'
-import IconButton from './IconButton'
-import BackIcon from '../icons/BackIcon'
 import { router } from 'expo-router'
+import React from 'react'
+import BackIcon from '../icons/BackIcon'
+import IconButton from './IconButton'
 
 export default function BackButton() {
   return (

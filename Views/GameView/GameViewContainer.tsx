@@ -8,8 +8,6 @@ import GameView from './GameView'
 export default function GameViewContainer() {
   const { ws, gameState } = useGlobalStore()
 
-  // return <FakeGameView />;
-
   if (gameState === GameState.WAITING) {
     if (!ws) {
       router.replace('/')

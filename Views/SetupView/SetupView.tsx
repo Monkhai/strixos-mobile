@@ -2,7 +2,9 @@ import avatarsMap from '@/assets/characters/avatarsMap'
 import AvatarSelector from '@/components/AvatarSelector/AvatarSelector'
 import { ThemedText } from '@/components/ThemedText'
 import { ThemedView } from '@/components/ThemedView'
+import PrimaryButton from '@/components/ui/buttons/PrimaryButton'
 import { IconSymbol } from '@/components/ui/IconSymbol'
+import Screen from '@/components/ui/screen-template/Screen'
 import UIButton from '@/components/ui/UIButton'
 import { Colors } from '@/constants/Colors'
 import { queryKeyStore } from '@/providers/ReactQueryProvider'
@@ -61,48 +63,50 @@ export default function SetupView() {
   return (
     <PortalProvider>
       <Pressable style={{ flex: 1 }} onPress={handlePressOutside}>
-        <ThemedView style={{ flex: 1, paddingTop: insets.top + 40, justifyContent: 'flex-start', alignItems: 'center' }}>
-          <ThemedText type="title">Let's set you up</ThemedText>
-          <View style={styles.formContainer}>
-            <View style={styles.displayNameSection}>
-              <ThemedText type="subtitle">Display name</ThemedText>
-              <View style={[styles.inputContainer, { backgroundColor: Colors[theme].inputBackground }]}>
-                <TextInput
-                  onEndEditing={e => {
-                    setDisplayName(e.nativeEvent.text)
-                  }}
-                  placeholderTextColor={Colors[theme].inputPlaceholder}
-                  placeholder="What do you want to be called?"
-                  style={{ color: Colors[theme].text, width: '100%' }}
-                />
+        <Screen>
+          <Screen.Header>
+            <ThemedText type="title">Let's set you up</ThemedText>
+          </Screen.Header>
+          <Screen.Body>
+            <View style={styles.formContainer}>
+              <View style={styles.displayNameSection}>
+                <ThemedText type="subtitle">Display name</ThemedText>
+                <View style={[styles.inputContainer, { backgroundColor: Colors[theme].inputBackground }]}>
+                  <TextInput
+                    onEndEditing={e => {
+                      setDisplayName(e.nativeEvent.text)
+                    }}
+                    placeholderTextColor={Colors[theme].inputPlaceholder}
+                    placeholder="What do you want to be called?"
+                    style={{ color: Colors[theme].text, width: '100%' }}
+                  />
+                </View>
+              </View>
+
+              <View style={styles.avatarSection}>
+                <ThemedText type="subtitle">Choose your avatar</ThemedText>
+                <AvatarSelector avatar={avatar} onAvatarSelect={a => setAvatar(a)} />
               </View>
             </View>
-
-            <View style={styles.avatarSection}>
-              <ThemedText type="subtitle">Choose your avatar</ThemedText>
-              <AvatarSelector avatar={avatar} onAvatarSelect={a => setAvatar(a)} />
-            </View>
-          </View>
-          <View style={{ width: '100%', flex: 1, justifyContent: 'center', alignItems: 'center', paddingTop: 100 }}>
-            <UIButton
+          </Screen.Body>
+          <Screen.Footer>
+            <PrimaryButton
               suffix={<IconSymbol name="arrow.right" size={24} color="white" />}
               wide
               isLoading={isPending}
               disabled={!displayName}
-              type="primary"
               onPress={handleContinue}
-            >
-              <Text style={{ color: 'white' }}>{isPending ? 'Loading...' : 'Continue'}</Text>
-            </UIButton>
-          </View>
-        </ThemedView>
+              label={isPending ? 'Loading...' : 'Continue'}
+            />
+          </Screen.Footer>
+        </Screen>
       </Pressable>
     </PortalProvider>
   )
 }
 
 const styles = StyleSheet.create({
-  formContainer: { gap: 40, paddingTop: 60, alignItems: 'flex-start' },
+  formContainer: { gap: 40, justifyContent: 'flex-start', flex: 1, alignItems: 'flex-start' },
   avatarSection: { alignItems: 'flex-start', gap: 20 },
   displayNameSection: { alignItems: 'flex-start', gap: 20 },
   inputContainer: {

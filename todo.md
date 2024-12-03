@@ -4,48 +4,50 @@
 
 - [x] define all styling that is still needed
 - [ ] do all the styling
+- [ ] "One more" when playing an invite game should have the same players play again and not into the lobby!
 - [ ] implement universal linking so that the link to download the app will present if the app is not installed and the app will open if it is
 - [ ] debug the websocket connections and error handling
 - [ ] ?? allow theme switching from blue to orange
 
 # Styling
 
-- [ ] create a beader body footer shape that all pages can use
+- [x] create a header body footer shape that all pages can use
+- [ ] on android, new buttons text is not centered
 
 ## Home Page
 
+- [x] use screen template
 - [ ] fill in the home page body
 - [ ] present the play online and play with a friend buttons and the connect button
-- [ ] use screen template
 
 ## Settings
 
+- [x] use screen template
 - [ ] use new buttons
-- [ ] use screen template
 - [ ] maybe add a themes option?
 
 ## Game
 
-- [ ] use screen template
+- [x] use screen template
 
 ### Loading Game
 
-- [ ] use screen template
+- [x] use screen template
 
 ### Active Game
 
-- [ ] use screen template
+- [x] use screen template
 - [ ] create header
 - [ ] create footer with new buttons
 
 ### Game Over
 
-- [ ] use screen template
+- [x] use screen template
 - [ ] create header
 - [ ] create footer with new buttons
 
 ### Game Disconnected
 
-- [ ] use screen template
+- [x] use screen template
 - [ ] create header
 - [ ] create footer with new buttons

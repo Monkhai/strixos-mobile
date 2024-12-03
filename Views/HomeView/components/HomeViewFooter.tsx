@@ -1,15 +1,11 @@
-import IconButton from '@/components/ui/buttons/IconButton'
 import PrimaryButton from '@/components/ui/buttons/PrimaryButton'
 import SecondaryButton from '@/components/ui/buttons/SecondaryButton'
-import BackIcon from '@/components/ui/icons/BackIcon'
-import UIButton from '@/components/ui/UIButton'
 import { WS_URL } from '@/server/constants'
 import { ClientMessageType, CreateGameInviteMessage, RequestGameMessage } from '@/server/messageTypes'
 import { useGlobalStore } from '@/stores/globalStore'
-import { WINDOW_WIDTH } from '@gorhom/bottom-sheet'
 import { router } from 'expo-router'
-import { Dispatch, SetStateAction, useEffect } from 'react'
-import { Alert, Platform, Text, View } from 'react-native'
+import { Dispatch, SetStateAction } from 'react'
+import { Alert, Platform, View } from 'react-native'
 
 interface Props {
   isConnecting: boolean

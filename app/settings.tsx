@@ -1,12 +1,12 @@
-import CustomHeader from '@/components/ui/CustomHeader';
-import SettingsView from '@/Views/SettingsView/SettingsView';
-import React from 'react';
+import CustomHeader from '@/components/ui/CustomHeader'
+import SettingsView from '@/Views/SettingsView/SettingsView'
+import React from 'react'
 
 export default function settings() {
   return (
     <>
-      <CustomHeader hideRight />
+      <CustomHeader hideRight title="Settings" />
       <SettingsView />
     </>
-  );
+  )
 }

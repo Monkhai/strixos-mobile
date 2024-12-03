@@ -1,24 +1,21 @@
-import { ThemedView } from '@/components/ThemedView'
 import GameTitle from '@/components/ui/GameTitle'
+import Screen from '@/components/ui/screen-template/Screen'
 import React from 'react'
-import { View } from 'react-native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import LoaderBoard from '../Board/LoaderBoard'
 import GameViewFooter from '../GameViewFooter'
 
 export default function LoadingGameView() {
-  const { top, bottom } = useSafeAreaInsets()
   return (
-    <ThemedView style={{ paddingTop: top, paddingBottom: bottom, flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <Screen>
+      <Screen.Header>
         <GameTitle />
-      </View>
-      <View style={{ flex: 4, justifyContent: 'center', alignItems: 'center', paddingBottom: 40 }}>
+      </Screen.Header>
+      <Screen.Body>
         <LoaderBoard />
-      </View>
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      </Screen.Body>
+      <Screen.Footer>
         <GameViewFooter />
-      </View>
-    </ThemedView>
+      </Screen.Footer>
+    </Screen>
   )
 }

@@ -1,6 +1,6 @@
 import { impactAsync, ImpactFeedbackStyle } from 'expo-haptics'
 import React, { ReactNode } from 'react'
-import { PressableProps, StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 import { useElementDimensions } from '../hooks/useElementDImensions'
 import { AnimatedPressable } from './constants'

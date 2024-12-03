@@ -1,7 +1,6 @@
-import { ThemedView } from '@/components/ThemedView'
+import Screen from '@/components/ui/screen-template/Screen'
 import { useGlobalStore } from '@/stores/globalStore'
 import React from 'react'
-import { View } from 'react-native'
 import Board from './components/Board/Board'
 import GameViewFooter from './components/GameViewFooter'
 import GameViewHeader from './components/GameViewHeader'
@@ -10,16 +9,16 @@ export default function GameView() {
   const { activePlayer, identity, board, sendMove, gameState } = useGlobalStore()
 
   return (
-    <ThemedView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <View style={{ flex: 1, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+    <Screen>
+      <Screen.Header>
         <GameViewHeader />
-      </View>
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      </Screen.Header>
+      <Screen.Body>
         <Board board={board} isDisabled={activePlayer?.id !== identity?.id || gameState !== 'playing'} onMove={sendMove} />
-      </View>
-      <View style={{ flex: 1, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+      </Screen.Body>
+      <Screen.Footer>
         <GameViewFooter />
-      </View>
-    </ThemedView>
+      </Screen.Footer>
+    </Screen>
   )
 }

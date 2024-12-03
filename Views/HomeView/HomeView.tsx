@@ -8,6 +8,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import HomeViewFooter from './components/HomeViewFooter'
 import { WS_URL } from '@/server/constants'
 import HomeViewBody from './components/HomeViewBody'
+import Screen from '@/components/ui/screen-template/Screen'
+import LoadingMarks from '@/components/ui/LoadingMarks'
+import LoaderBoard from '../GameView/components/Board/LoaderBoard'
 
 export default function HomeView() {
   const { ws, createWSConnection } = useGlobalStore()
@@ -29,22 +32,18 @@ export default function HomeView() {
   }, [ws])
 
   return (
-    <ThemedView style={{ flex: 1, paddingTop: insets.top + headerHeight, justifyContent: 'flex-start', alignItems: 'center' }}>
-      <View style={{ flex: 3, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+    <Screen withRouteHeader>
+      <Screen.Header>
         <HomeViewBody />
-      </View>
-      <View style={[styles.footer, { paddingBottom: Platform.select({ android: insets.bottom + 32, ios: insets.bottom }) }]}>
+      </Screen.Header>
+      <Screen.Body>
+        {/*  */}
+        {/* FIND SOMETHING TO PUT HERE */}
+        {/*  */}
+      </Screen.Body>
+      <Screen.Footer>
         <HomeViewFooter isConnecting={isConnecting} setIsConnecting={setIsConnecting} />
-      </View>
-    </ThemedView>
+      </Screen.Footer>
+    </Screen>
   )
 }
-
-const styles = StyleSheet.create({
-  footer: {
-    width: '100%',
-    flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-  },
-})

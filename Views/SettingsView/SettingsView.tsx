@@ -13,6 +13,9 @@ import React from 'react'
 import { Keyboard, Platform, Pressable, StyleSheet, Text, TextInput, useColorScheme, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import AvatarSelector from '../../components/AvatarSelector/AvatarSelector'
+import Screen from '@/components/ui/screen-template/Screen'
+import { useHeaderHeight } from '@react-navigation/elements'
+import PrimaryButton from '@/components/ui/buttons/PrimaryButton'
 
 export default function SettingsView() {
   const insets = useSafeAreaInsets()
@@ -40,47 +43,46 @@ export default function SettingsView() {
   return (
     <PortalProvider>
       <Pressable style={{ flex: 1 }} onPress={Keyboard.dismiss}>
-        <ThemedView style={{ flex: 1, paddingTop: insets.top + 40, justifyContent: 'flex-start', alignItems: 'center' }}>
-          <ThemedText type="title">Settings</ThemedText>
-          <View style={styles.formContainer}>
-            <View style={styles.displayNameSection}>
-              <ThemedText type="subtitle">Display name</ThemedText>
-              <View style={[styles.inputContainer, { backgroundColor: Colors[theme].inputBackground }]}>
-                <TextInput
-                  onEndEditing={e => {
-                    setDisplayName(e.nativeEvent.text)
-                  }}
-                  placeholderTextColor={Colors[theme].inputPlaceholder}
-                  placeholder={preferences.displayName}
-                  style={{ color: Colors[theme].text, width: '100%' }}
-                />
+        <Screen noHeader>
+          <Screen.Body>
+            <View style={styles.formContainer}>
+              <View style={styles.displayNameSection}>
+                <ThemedText type="subtitle">Display name</ThemedText>
+                <View style={[styles.inputContainer, { backgroundColor: Colors[theme].inputBackground }]}>
+                  <TextInput
+                    onEndEditing={e => {
+                      setDisplayName(e.nativeEvent.text)
+                    }}
+                    placeholderTextColor={Colors[theme].inputPlaceholder}
+                    placeholder={preferences.displayName}
+                    style={{ color: Colors[theme].text, width: '100%' }}
+                  />
+                </View>
+              </View>
+
+              <View style={styles.avatarSection}>
+                <ThemedText type="subtitle">Choose your avatar</ThemedText>
+                <AvatarSelector avatar={avatar} onAvatarSelect={a => setAvatar(a)} />
               </View>
             </View>
-
-            <View style={styles.avatarSection}>
-              <ThemedText type="subtitle">Choose your avatar</ThemedText>
-              <AvatarSelector avatar={avatar} onAvatarSelect={a => setAvatar(a)} />
-            </View>
-          </View>
-          <View style={{ width: '100%', flex: 1, justifyContent: 'center', alignItems: 'center', paddingTop: 100 }}>
-            <UIButton
+          </Screen.Body>
+          <Screen.Footer>
+            <PrimaryButton
               wide
               isLoading={isPending}
               disabled={displayName === preferences.displayName && avatar === preferences.preferedAvatar}
-              type="primary"
               onPress={handleUpdate}
-            >
-              <Text style={{ color: 'white' }}>{isPending ? 'Loading...' : 'Save changes'}</Text>
-            </UIButton>
-          </View>
-        </ThemedView>
+              label={isPending ? 'Loading...' : 'Save changes'}
+            />
+          </Screen.Footer>
+        </Screen>
       </Pressable>
     </PortalProvider>
   )
 }
 
 const styles = StyleSheet.create({
-  formContainer: { gap: 40, paddingTop: 60, alignItems: 'flex-start' },
+  formContainer: { gap: 40, justifyContent: 'flex-start', flex: 1, alignItems: 'flex-start' },
   avatarSection: { alignItems: 'flex-start', gap: 20 },
   displayNameSection: { alignItems: 'flex-start', gap: 20 },
   inputContainer: {
