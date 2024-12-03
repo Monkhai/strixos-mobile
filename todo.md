@@ -30,6 +30,19 @@
 
 - [x] use screen template
 
+### Inite Game Lobby
+
+- [ ] use screen template
+- [ ] create header
+- [ ] create footer with new buttons
+
+### Invite Game Screen
+
+- [ ] use screen template
+- [ ] create header
+- [ ] create nice icon for the invite button
+- [ ] create footer with new buttons
+
 ### Loading Game
 
 - [x] use screen template
