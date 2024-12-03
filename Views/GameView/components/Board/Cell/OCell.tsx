@@ -1,3 +1,5 @@
+import { GameState } from '@/server/gameTypes'
+import { useGlobalStore } from '@/stores/globalStore'
 import { Canvas, LinearGradient, Oval, Path, Shadow, Skia, vec } from '@shopify/react-native-skia'
 import React, { useEffect, useMemo } from 'react'
 import { Pressable } from 'react-native'
@@ -15,8 +17,9 @@ const colors = {
 }
 
 export default function OCell({ dying, containerSize = 50 }: Props) {
+  const { gameState } = useGlobalStore()
   const v = useSharedValue(0)
-  const containerOpacity = useSharedValue(0)
+  const containerOpacity = useSharedValue(1)
   const size = useMemo(() => containerSize * 2, [containerSize])
   const shadowOpacity = useDerivedValue(() => {
     return v.value * 0.4
@@ -39,6 +42,7 @@ export default function OCell({ dying, containerSize = 50 }: Props) {
   const style = useAnimatedStyle(() => {
     return {
       transform: [{ scale: v.value }],
+      opacity: containerOpacity.value,
     }
   })
 
@@ -47,12 +51,12 @@ export default function OCell({ dying, containerSize = 50 }: Props) {
   }, [])
 
   useEffect(() => {
-    if (dying) {
-      containerOpacity.value = withRepeat(withTiming(0.5, { duration: 800 }), -1, true)
+    if (dying && gameState === GameState.PLAYING) {
+      containerOpacity.value = withRepeat(withTiming(0.3, { duration: 800 }), -1, true)
     } else {
       containerOpacity.value = withTiming(1)
     }
-  }, [dying])
+  }, [dying, gameState])
 
   return (
     <Animated.View style={[{ height: size, width: size, paddingTop: containerSize * 0.15 }, style]}>

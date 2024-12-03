@@ -6,8 +6,9 @@ interface Props {
   board: Board
   isDisabled: boolean
   onMove: (row: number, col: number) => void
+  hideCells?: boolean
 }
-export default function BoardComponent({ board, onMove, isDisabled }: Props) {
+export default function BoardComponent({ board, onMove, isDisabled, hideCells = false }: Props) {
   return (
     <View style={{ flexDirection: 'column' }}>
       {board.map((row, rowIndex) => {
@@ -16,6 +17,7 @@ export default function BoardComponent({ board, onMove, isDisabled }: Props) {
             {row.map((cell, cellIndex) => {
               return (
                 <Cell
+                  hideCell={hideCells}
                   key={cellIndex}
                   isDisabled={isDisabled || cell.value !== '-'}
                   lives={cell.lives}

@@ -18,7 +18,6 @@ const colors = {
 export default function XCell({ dying, containerSize = 50 }: Props) {
   const v = useSharedValue(0)
   const containerOpacity = useSharedValue(1)
-
   const size = useMemo(() => containerSize * 2, [containerSize])
   const shadowOpacity = useDerivedValue(() => {
     return v.value * 0.4
@@ -62,7 +61,7 @@ export default function XCell({ dying, containerSize = 50 }: Props) {
 
   useEffect(() => {
     if (dying) {
-      containerOpacity.value = withRepeat(withTiming(0.5, { duration: 800 }), -1, true)
+      containerOpacity.value = withRepeat(withTiming(0.3, { duration: 800 }), -1, true)
     } else {
       containerOpacity.value = withTiming(1)
     }

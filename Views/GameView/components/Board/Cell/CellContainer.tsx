@@ -14,23 +14,31 @@ interface Props {
   win: boolean
   lives: number
   isDisabled: boolean
+  hideCell?: boolean
 }
 
-export default function CellContainer({ lives, onPress, value, win, isDisabled }: Props) {
+export default function CellContainer({ lives, onPress, value, win, hideCell = false }: Props) {
   const theme = useColorScheme() ?? 'light'
   const val = useSharedValue(1)
-  const animatedStyle = useAnimatedStyle(() => ({
-    borderColor: win
-      ? interpolateColor(
-          val.value,
-          [0, 1, 2],
-          [PrimaryColors[theme].x.primary, PrimaryColors[theme]['-'].primary, PrimaryColors[theme].o.primary]
-        )
-      : PrimaryColors[theme]['-'].primary,
-  }))
+  const animatedStyle = useAnimatedStyle(() => {
+    const borderColor = interpolateColor(
+      val.value,
+      [0, 1, 2],
+      [PrimaryColors[theme].x.primary, PrimaryColors[theme]['-'].primary, PrimaryColors[theme].o.primary]
+    )
+    return {
+      borderColor: win ? borderColor : PrimaryColors[theme]['-'].primary,
+
+      backgroundColor: interpolateColor(
+        val.value,
+        [0, 1, 2],
+        [PrimaryColors[theme].x.shadow, 'transparent', PrimaryColors[theme].o.shadow]
+      ),
+    }
+  })
 
   useEffect(() => {
-    val.value = withTiming(valueToNumber[value])
+    val.value = withTiming(valueToNumber[value], { duration: 500 })
   }, [value])
 
   return (
@@ -38,9 +46,9 @@ export default function CellContainer({ lives, onPress, value, win, isDisabled }
       onPress={() => {
         onPress()
       }}
-      style={[{ backgroundColor: win ? PrimaryColors[theme][value].shadow : 'transparent' }, animatedStyle, styles.container]}
+      style={[{}, animatedStyle, styles.container]}
     >
-      <Cell lives={lives} value={value} />
+      {hideCell ? null : <Cell lives={lives} value={value} />}
     </AnimatedPressable>
   )
 }

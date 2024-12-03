@@ -3,7 +3,7 @@ import GameTitle from '@/components/ui/GameTitle'
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
 
-export default function HomeViewBody() {
+export default function HomeViewHeader() {
   return (
     <View style={styles.container}>
       <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'center' }}>
