@@ -16,6 +16,7 @@ export enum ServerMessageType {
   START_GAME = 'startGame',
   UPDATE = 'update',
   GAME_OVER = 'gameOver',
+  INVITE_GAME_OVER = 'inviteGameOver',
   GAME_CLOSED = 'gameClosed',
   ERROR = 'error',
   GAME_WAITING = 'gameWaiting',
@@ -81,7 +82,7 @@ export interface ServerMessage extends BaseMessage {
   type: ServerMessageType
 }
 
-export interface CloseMessage extends ServerMessage {
+export interface GameClosedMessage extends ServerMessage {
   type: ServerMessageType.GAME_CLOSED
   reason: string
 }
@@ -117,6 +118,15 @@ export interface GameOverMessage extends ServerMessage {
   content: {
     board: Board
     winner: SafeIdentity
+  }
+}
+
+export interface InviteGameOverMessage extends ServerMessage {
+  type: ServerMessageType.GAME_OVER
+  content: {
+    board: Board
+    winner: SafeIdentity
+    newGameID: string
   }
 }
 

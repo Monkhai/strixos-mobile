@@ -1,11 +1,10 @@
-import avatarsMap from '@/assets/characters/avatarsMap'
 import { Board, GameState, Mark } from '@/server/gameTypes'
 import {
   ClientMessageType,
-  CreateGameInviteMessage,
   ErrorMessage,
   GameOverMessage,
   InviteGameCreatedMessage,
+  InviteGameOverMessage,
   MoveMessage,
   ServerMessage,
   ServerMessageType,
@@ -17,7 +16,7 @@ import { Identity, SafeIdentity } from '@/server/playerTypes'
 import { InitialIdentityMessage, RegisteredMessage } from '@/server/registerFlowMessages'
 import { WebSocketHandler } from '@/server/webSocketHandler'
 import { Preferences } from '@/storage/preferencesTypes'
-import { getIdentity, getPreferences, setIdentity } from '@/storage/secureStorage'
+import { getIdentity, setIdentity } from '@/storage/secureStorage'
 import { getEmptyBoard } from '@/Views/GameView/components/Board/utils'
 import { router } from 'expo-router'
 import { create } from 'zustand'
@@ -35,6 +34,8 @@ interface StoreType {
   error: string | null
   preferences: Preferences
   gameID: string | null
+  newGameID: string | null
+  isInviteGame: boolean
 
   createWSConnection: () => void
   setWsHandler: (wsHandler: WebSocketHandler) => void
@@ -63,6 +64,8 @@ export const useGlobalStore = create<StoreType>()((set, get) => ({
     preferedAvatar: 'unknown',
   },
   gameID: null,
+  newGameID: null,
+  isInviteGame: false,
 
   //actions
   setPreferences(preferences) {
@@ -92,7 +95,10 @@ export const useGlobalStore = create<StoreType>()((set, get) => ({
       gameState: GameState.NONE,
       opponentIdentity: null,
       gameWinner: null,
-      resetError: () => set({ error: null }),
+      error: null,
+      gameID: null,
+      newGameID: null,
+      isInviteGame: false,
     })
   },
 
@@ -133,6 +139,7 @@ export const useGlobalStore = create<StoreType>()((set, get) => ({
       onMessage(event) {
         try {
           const message = JSON.parse(event.data) as ServerMessage
+          // console.log(message.type)
 
           switch (message.type) {
             case ServerMessageType.AUTH_IDENTITY: {
@@ -153,6 +160,7 @@ export const useGlobalStore = create<StoreType>()((set, get) => ({
               break
             }
             case ServerMessageType.REGISTERED: {
+              console.log('registered')
               const { content } = message as RegisteredMessage
               void setIdentity(content.identity)
               set({
@@ -170,13 +178,24 @@ export const useGlobalStore = create<StoreType>()((set, get) => ({
                 opponentIdentity: content.opponent,
                 gameID: content.gameID,
               })
-              router.replace('/game')
+              router.dismissTo('/game', { withAnchor: true })
               break
             }
             case ServerMessageType.INVITE_GAME_CREATED: {
               const { content } = message as InviteGameCreatedMessage
               set({ gameID: content.gameID })
               router.replace(`/invite-game/lobby`)
+              break
+            }
+            case ServerMessageType.INVITE_GAME_OVER: {
+              const { content } = message as InviteGameOverMessage
+              set({
+                board: content.board,
+                gameState: GameState.FINISHED,
+                gameWinner: content.winner,
+                newGameID: content.newGameID,
+                isInviteGame: true,
+              })
               break
             }
             case ServerMessageType.UPDATE: {
@@ -188,7 +207,8 @@ export const useGlobalStore = create<StoreType>()((set, get) => ({
               break
             }
             case ServerMessageType.GAME_CLOSED: {
-              // this is a message from the server to notify that the other player has disconnected and the game is over
+              // this is a message from the server to notify that the other player
+              // has disconnected and the game is over
               set({
                 board: getEmptyBoard(),
                 mark: 'unknown',
@@ -212,12 +232,12 @@ export const useGlobalStore = create<StoreType>()((set, get) => ({
             }
             case ServerMessageType.REMOVED_FROM_GAME: {
               get().resetAllStates()
-              router.replace('/')
+              router.dismissTo('/home')
               break
             }
             case ServerMessageType.REMOVED_FROM_QUEUE: {
               get().resetAllStates()
-              router.replace('/')
+              router.dismissTo('/home')
               break
             }
             case ServerMessageType.ERROR: {
@@ -229,14 +249,12 @@ export const useGlobalStore = create<StoreType>()((set, get) => ({
               set({ gameState: GameState.OPPONENT_DISCONNECTED })
               break
             }
-
             case ServerMessageType.SERVER_DISCONNECTED: {
               set({ error: 'Server disconnected' })
               get().resetAllStates()
-              router.replace('/')
+              router.dismissTo('/home')
               break
             }
-
             default: {
               console.error('Unknown message type', message)
             }

@@ -1,7 +1,6 @@
 import DangerButton from '@/components/ui/buttons/DangerButton'
 import PrimaryButton from '@/components/ui/buttons/PrimaryButton'
 import SecondaryButton from '@/components/ui/buttons/SecondaryButton'
-import { TextButton } from '@/components/ui/UIButton'
 import { GameState } from '@/server/gameTypes'
 import { ClientMessageType } from '@/server/messageTypes'
 import { useGlobalStore } from '@/stores/globalStore'
@@ -14,24 +13,7 @@ export default function GameViewFooter() {
 
   switch (gameState) {
     case GameState.FINISHED: {
-      return (
-        <View style={styles[GameState.FINISHED]}>
-          <PrimaryButton
-            onPress={() => {
-              ws?.sendMessage({ type: ClientMessageType.GAME_REQUEST })
-            }}
-            wide
-            label="One more"
-          />
-          <SecondaryButton
-            onPress={() => {
-              router.replace('/')
-            }}
-            wide
-            label="Back home"
-          />
-        </View>
-      )
+      return <GameFinsihedFooter />
     }
     case GameState.OPPONENT_DISCONNECTED: {
       return (
@@ -45,7 +27,7 @@ export default function GameViewFooter() {
           />
           <SecondaryButton
             onPress={() => {
-              router.replace('/')
+              router.dismissTo('/home')
             }}
             wide
             label="Back home"
@@ -82,6 +64,33 @@ export default function GameViewFooter() {
   }
 
   return null
+}
+
+function GameFinsihedFooter() {
+  const { ws, isInviteGame, newGameID } = useGlobalStore()
+
+  function handlePlayAgain() {
+    if (isInviteGame && newGameID) {
+      router.replace(`/invite-game/${newGameID}`)
+      return
+    }
+    ws?.sendMessage({ type: ClientMessageType.GAME_REQUEST })
+  }
+
+  function handleBackHome() {
+    if (isInviteGame) {
+      router.dismissTo('/home')
+      return
+    }
+    router.replace('/home')
+  }
+
+  return (
+    <View style={styles[GameState.FINISHED]}>
+      <PrimaryButton onPress={handlePlayAgain} wide label="One more" />
+      <SecondaryButton onPress={handleBackHome} wide label="Back home" />
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({

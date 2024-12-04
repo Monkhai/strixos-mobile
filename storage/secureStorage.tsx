@@ -6,6 +6,7 @@ const IDENTITY_KEY = 'identity'
 const PREFERENCES_KEY = 'preferences'
 
 export async function setIdentity(identity: Identity) {
+  console.log('setting new identity')
   const preferences = await getPreferences()
   if (preferences && preferences.preferedAvatar) {
     const newIdentity: Identity = { ...identity, avatar: preferences.preferedAvatar }

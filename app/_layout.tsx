@@ -1,7 +1,7 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native'
+import { CommonActions, DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native'
 import { useFonts } from 'expo-font'
 import * as NavigationBar from 'expo-navigation-bar'
-import { router, Stack, usePathname } from 'expo-router'
+import { router, Stack, useLocalSearchParams, useNavigation, usePathname } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import { StatusBar } from 'expo-status-bar'
 import { useEffect } from 'react'
@@ -71,7 +71,6 @@ function Layout() {
       return preferences
     },
   })
-
   useEffect(() => {
     if (preferences === null) {
       router.replace('/setup')

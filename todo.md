@@ -38,7 +38,14 @@
       - [x] use screen template
       - [x] create header
       - [x] create footer with new buttons
-- [ ] "One more" when playing an invite game should have the same players play again and not into the lobby!
+- [x] "One more" when playing an invite game should have the same players play again and not into the lobby!
+  - [x] add isInviteGame to the game state
+  - [x] add the new game id to the global state to allow player to navigate to it
+  - [x] when in invite game screen, footer should function differently. `newGameID` and `isInviteGame` should be reset!
+  - [x] fix routing from invite game to game to home
+    - when joining an invited game, then exiting, the navigation stack index is 1 and not 0 so we must dismissAll rather than just replace. that worked
+  - [x] new game queue breaks now!
+  - [ ] cannot invite to game when other player's app is not open
 - [ ] implement universal linking so that the link to download the app will present if the app is not installed and the app will open if it is
 - [ ] debug the websocket connections and error handling
 - [ ] ?? allow theme switching from blue to orange
