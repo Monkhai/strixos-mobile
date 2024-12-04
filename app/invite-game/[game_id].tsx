@@ -1,14 +1,20 @@
+import DangerButton from '@/components/ui/buttons/DangerButton'
 import Loader from '@/components/ui/Loader'
+import Screen from '@/components/ui/screen-template/Screen'
+import SpecialTitle from '@/components/ui/SpecialTitle'
+import { PrimaryColors } from '@/constants/Colors'
 import { WS_URL } from '@/server/constants'
-import { ClientMessageType, JoinGameInviteMessage } from '@/server/messageTypes'
+import { ClientMessageType, JoinGameInviteMessage, LeaveGameMessage } from '@/server/messageTypes'
 import { useGlobalStore } from '@/stores/globalStore'
-import { useLocalSearchParams } from 'expo-router'
+import LoaderBoard from '@/Views/GameView/components/Board/LoaderBoard'
+import { router, useLocalSearchParams } from 'expo-router'
 import React, { useEffect } from 'react'
-import { View } from 'react-native'
+import { useColorScheme, View } from 'react-native'
 
 export default function Page() {
   const { ws, createWSConnection } = useGlobalStore()
   const { game_id } = useLocalSearchParams<{ game_id: string }>()
+  const theme = useColorScheme() ?? 'light'
 
   function joinGame() {
     if (!ws) {
@@ -17,12 +23,19 @@ export default function Page() {
     if (ws?.getReadyState() !== WebSocket.OPEN) {
       ws?.connect(WS_URL)
     }
-    const mg: JoinGameInviteMessage = {
+    const msg: JoinGameInviteMessage = {
       type: ClientMessageType.JOIN_INVITE_GAME,
       gameID: game_id,
     }
     if (ws) {
-      ws.sendMessage(mg)
+      ws.sendMessage(msg)
+    }
+  }
+
+  function goHome() {
+    if (ws && ws?.getReadyState() === WebSocket.OPEN) {
+      ws.sendMessage(LeaveGameMessage)
+      router.replace('/home')
     }
   }
 
@@ -31,8 +44,16 @@ export default function Page() {
   }, [])
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Loader size={200} />
-    </View>
+    <Screen>
+      <Screen.Header>
+        <SpecialTitle title="Loading your game" />
+      </Screen.Header>
+      <Screen.Body>
+        <LoaderBoard />
+      </Screen.Body>
+      <Screen.Footer>
+        <DangerButton label="Cancel" onPress={goHome} />
+      </Screen.Footer>
+    </Screen>
   )
 }

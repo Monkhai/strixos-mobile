@@ -33,8 +33,8 @@ export default function DangerButton({
   const foregroundPaint = Skia.Paint()
   foregroundPaint.setShader(
     Skia.Shader.MakeLinearGradient(
-      { x: 0, y: h },
-      { x: w * 1.3, y: 0 },
+      { x: 10, y: h },
+      { x: w, y: 0 },
       [Skia.Color(PrimaryColors[theme].o.primary), Skia.Color(PrimaryColors[theme].o.secondary)],
       null,
       TileMode.Clamp
@@ -75,7 +75,7 @@ export default function DangerButton({
         <RoundedRect r={8} height={h} width={w} x={0} y={0} style={'stroke'} strokeWidth={4}>
           <LinearGradient
             colors={[PrimaryColors[theme].o.primary, PrimaryColors[theme].o.secondary]}
-            start={{ x: 0, y: h }}
+            start={{ x: 10, y: h }}
             end={{ x: w * 1.5, y: 0 }}
           />
         </RoundedRect>

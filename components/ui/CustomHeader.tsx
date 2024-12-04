@@ -6,13 +6,15 @@ import { Platform, Text, View } from 'react-native'
 import { useHeaderHeight } from '@react-navigation/elements'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { ThemedText } from '../ThemedText'
+import SpecialTitle from './SpecialTitle'
 
 interface Props {
   hideLeft?: boolean
   hideRight?: boolean
   title?: string
+  specialTitle?: React.ReactNode
 }
-export default function CustomHeader({ hideLeft = false, hideRight = false, title = '' }: Props) {
+export default function CustomHeader({ hideLeft = false, hideRight = false, title = '', specialTitle = false }: Props) {
   const headerHeight = useHeaderHeight()
   const insets = useSafeAreaInsets()
   return (
@@ -29,10 +31,10 @@ export default function CustomHeader({ hideLeft = false, hideRight = false, titl
                   alignItems: 'center',
                   justifyContent: 'center',
                   height: headerHeight - insets.top,
-                  paddingTop: 8,
+                  paddingTop: specialTitle ? 12 : 8,
                 }}
               >
-                <ThemedText type="title">{props.children}</ThemedText>
+                {specialTitle ? <SpecialTitle title={props.children} /> : <ThemedText type="title">{props.children}</ThemedText>}
               </View>
             )
           },

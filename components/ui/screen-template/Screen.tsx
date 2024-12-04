@@ -29,5 +29,5 @@ function Body({ children }: { children?: ReactNode }) {
   return <View style={{ width: '100%', flex: 3, justifyContent: 'center', alignItems: 'center' }}>{children}</View>
 }
 function Footer({ children }: { children?: ReactNode }) {
-  return <View style={{ width: '100%', flex: 1, justifyContent: 'center', alignItems: 'center' }}>{children}</View>
+  return <View style={{ width: '100%', flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>{children}</View>
 }
