@@ -14,13 +14,10 @@ interface Props {
 
 export default function HomeViewFooter({ isConnecting, setIsConnecting }: Props) {
   const ws = useGlobalStore(s => s.ws)
+  const connectionState = useGlobalStore(s => s.connectionState)
   const createWSConnection = useGlobalStore(s => s.createWSConnection)
 
-  // useEffect(() => {
-  //   if (!ws) createWSConnection()
-  // }, [])
-
-  function retryConnection() {
+  const retryConnection = () => {
     if (!ws) {
       createWSConnection()
       return
@@ -75,7 +72,7 @@ export default function HomeViewFooter({ isConnecting, setIsConnecting }: Props)
     }
   }
 
-  if (ws?.getReadyState() !== WebSocket.OPEN) {
+  if (connectionState !== WebSocket.OPEN) {
     return <PrimaryButton onPress={retryConnection} isLoading={isConnecting} wide label={isConnecting ? 'Connecting' : 'Connect'} />
   }
 

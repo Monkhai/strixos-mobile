@@ -9,6 +9,7 @@ export function useConnectToWebSocket() {
   }, [])
   useEffect(() => {
     if (ws && ws.getReadyState() !== WebSocket['OPEN'] && ws.getReadyState() !== WebSocket['CONNECTING']) {
+      console.log('Connecting to WebSocket')
       const err = ws.connect(WS_URL)
       if (err) {
         console.error(err)
