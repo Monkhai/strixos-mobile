@@ -1,7 +1,3 @@
-# To Do
-
-# Plan
-
 - [x] define all styling that is still needed
 - [x] Styling
   - [x] create a header body footer shape that all pages can use
@@ -45,7 +41,7 @@
   - [x] fix routing from invite game to game to home
     - when joining an invited game, then exiting, the navigation stack index is 1 and not 0 so we must dismissAll rather than just replace. that worked
   - [x] new game queue breaks now!
-  - [ ] cannot invite to game when other player's app is not open
+  - [x] cannot invite to game when other player's app is not open
 - [ ] implement universal linking so that the link to download the app will present if the app is not installed and the app will open if it is
 - [ ] debug the websocket connections and error handling
 - [ ] ?? allow theme switching from blue to orange

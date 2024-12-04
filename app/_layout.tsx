@@ -14,6 +14,7 @@ import { useGlobalStore } from '@/stores/globalStore'
 import { useQuery } from '@tanstack/react-query'
 import { Platform } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { useConnectToWebSocket } from '@/hooks/useConnectToWebSocket'
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync()
@@ -60,7 +61,7 @@ export default function RootLayout() {
 
 function Layout() {
   const path = usePathname()
-  const { setPreferences, preferences: p } = useGlobalStore()
+  const { setPreferences } = useGlobalStore()
   const { data: preferences } = useQuery({
     queryKey: queryKeyStore.preferences,
     queryFn: async () => {
@@ -71,6 +72,7 @@ function Layout() {
       return preferences
     },
   })
+  useConnectToWebSocket()
   useEffect(() => {
     if (preferences === null) {
       router.replace('/setup')

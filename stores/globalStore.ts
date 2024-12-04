@@ -1,3 +1,4 @@
+import { WS_URL } from '@/server/constants'
 import { Board, GameState, Mark } from '@/server/gameTypes'
 import {
   ClientMessageType,
@@ -139,7 +140,6 @@ export const useGlobalStore = create<StoreType>()((set, get) => ({
       onMessage(event) {
         try {
           const message = JSON.parse(event.data) as ServerMessage
-          // console.log(message.type)
 
           switch (message.type) {
             case ServerMessageType.AUTH_IDENTITY: {
@@ -160,7 +160,6 @@ export const useGlobalStore = create<StoreType>()((set, get) => ({
               break
             }
             case ServerMessageType.REGISTERED: {
-              console.log('registered')
               const { content } = message as RegisteredMessage
               void setIdentity(content.identity)
               set({

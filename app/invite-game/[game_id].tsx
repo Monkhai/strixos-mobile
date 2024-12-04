@@ -13,23 +13,25 @@ export default function Page() {
   const { ws, createWSConnection } = useGlobalStore()
   const { game_id } = useLocalSearchParams<{ game_id: string }>()
 
-  function joinGame() {
+  useEffect(() => {
+    console.log(!!ws)
+  }, [ws])
+
+  const joinGame = () => {
     if (!ws) {
-      createWSConnection()
+      return
     }
-    if (ws?.getReadyState() !== WebSocket.OPEN) {
+    if (ws.getReadyState() !== WebSocket.OPEN) {
       ws?.connect(WS_URL)
     }
     const msg: JoinGameInviteMessage = {
       type: ClientMessageType.JOIN_INVITE_GAME,
       gameID: game_id,
     }
-    if (ws) {
-      ws.sendMessage(msg)
-    }
+    ws.sendMessage(msg)
   }
 
-  function goHome() {
+  const goHome = () => {
     if (ws && ws?.getReadyState() === WebSocket.OPEN) {
       ws.sendMessage(LeaveGameMessage)
     }
@@ -37,7 +39,13 @@ export default function Page() {
   }
 
   useEffect(() => {
-    joinGame()
+    const i = setInterval(() => {
+      joinGame()
+    }, 2000)
+
+    return () => {
+      clearInterval(i)
+    }
   }, [])
 
   return (
