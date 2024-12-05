@@ -1,5 +1,6 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native'
 import { useFonts } from 'expo-font'
+import * as NavigationBar from 'expo-navigation-bar'
 import { router, Stack, usePathname } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import { StatusBar } from 'expo-status-bar'
@@ -20,7 +21,7 @@ SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
   const colorScheme = useColorScheme()
-  // const navBarVisibliity = NavigationBar.useVisibility()
+  const navBarVisibliity = NavigationBar.useVisibility()
   const [loaded] = useFonts({
     babek: require('../assets/fonts/BakbakOne-Regular.ttf'),
   })
@@ -29,21 +30,21 @@ export default function RootLayout() {
     if (loaded) {
       SplashScreen.hideAsync()
       if (Platform.OS === 'android') {
-        // NavigationBar.setVisibilityAsync('hidden')
-        // NavigationBar.setBehaviorAsync('inset-swipe')
+        NavigationBar.setVisibilityAsync('hidden')
+        NavigationBar.setBehaviorAsync('inset-swipe')
       }
     }
   }, [loaded])
 
-  // useEffect(() => {
-  //   if (navBarVisibliity === 'visible') {
-  //     if (Platform.OS === 'android') {
-  //       setTimeout(() => {
-  //         // NavigationBar.setVisibilityAsync('hidden')
-  //       }, 2000)
-  //     }
-  //   }
-  // }, [navBarVisibliity])
+  useEffect(() => {
+    if (navBarVisibliity === 'visible') {
+      if (Platform.OS === 'android') {
+        setTimeout(() => {
+          NavigationBar.setVisibilityAsync('hidden')
+        }, 2000)
+      }
+    }
+  }, [navBarVisibliity])
 
   if (!loaded) {
     return null
