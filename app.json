@@ -39,12 +39,22 @@
       [
         "expo-font",
         {
-          "fonts": ["./assets/fonts/BakbakOne-Regular.ttf"]
+          "fonts": [
+            "./assets/fonts/BakbakOne-Regular.ttf"
+          ]
         }
       ]
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "ae659c1a-5563-48cb-9f87-a9373224bbbf"
+      }
     }
   }
 }
