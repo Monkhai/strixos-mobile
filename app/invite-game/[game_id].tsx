@@ -13,10 +13,6 @@ export default function Page() {
   const { ws, createWSConnection } = useGlobalStore()
   const { game_id } = useLocalSearchParams<{ game_id: string }>()
 
-  useEffect(() => {
-    console.log(!!ws)
-  }, [ws])
-
   const joinGame = () => {
     if (!ws) {
       return
