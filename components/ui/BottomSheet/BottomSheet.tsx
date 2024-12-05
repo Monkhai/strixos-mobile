@@ -1,15 +1,15 @@
-import { View, Text, useColorScheme, StyleSheet } from 'react-native';
-import React from 'react';
-import BottomSheet, { BottomSheetBackdrop, BottomSheetHandleProps, BottomSheetProps, WINDOW_HEIGHT } from '@gorhom/bottom-sheet';
-import { Canvas, RoundedRect } from '@shopify/react-native-skia';
-import { Colors } from '@/constants/Colors';
-import { Portal } from '@gorhom/portal';
+import { View, Text, useColorScheme, StyleSheet } from 'react-native'
+import React from 'react'
+import BottomSheet, { BottomSheetBackdrop, BottomSheetHandleProps, BottomSheetProps, WINDOW_HEIGHT } from '@gorhom/bottom-sheet'
+import { Canvas, RoundedRect } from '@shopify/react-native-skia'
+import { Colors } from '@/constants/Colors'
+import { Portal } from '@gorhom/portal'
 
 interface Props extends BottomSheetProps {
-  bottomSheetRef: React.RefObject<BottomSheet>;
+  bottomSheetRef: React.RefObject<BottomSheet>
 }
 export default function CustomBottomSheet({ bottomSheetRef, ...props }: Props) {
-  const theme = useColorScheme() ?? 'light';
+  const theme = useColorScheme() ?? 'light'
   return (
     <Portal>
       <BottomSheet
@@ -25,11 +25,11 @@ export default function CustomBottomSheet({ bottomSheetRef, ...props }: Props) {
         {...props}
       />
     </Portal>
-  );
+  )
 }
 
 function Handle(props: BottomSheetHandleProps) {
-  const theme = useColorScheme() ?? 'light';
+  const theme = useColorScheme() ?? 'light'
   return (
     <View
       {...props}
@@ -46,7 +46,7 @@ function Handle(props: BottomSheetHandleProps) {
         <RoundedRect r={10} x={0} y={0} width={35} height={5} color="#7F7F7F" opacity={0.4} />
       </Canvas>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     height: 5,
     backgroundColor: 'transparent',
   },
-});
+})
 
 const themedIndicatorColor = {
   light: {
@@ -69,4 +69,4 @@ const themedIndicatorColor = {
     light: '#c2c2c2',
     dark: '#7f7f7f',
   },
-};
+}

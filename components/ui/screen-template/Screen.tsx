@@ -1,7 +1,7 @@
 import { ThemedView } from '@/components/ThemedView'
 import { useHeaderHeight } from '@react-navigation/elements'
 import React, { ReactNode } from 'react'
-import { View } from 'react-native'
+import { Platform, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 interface Props {
@@ -14,7 +14,9 @@ export default function Screen({ children, noHeader = false, withRouteHeader = f
   const insets = useSafeAreaInsets()
   const headerHeight = useHeaderHeight()
   const paddingTop = noHeader ? headerHeight + insets.top / 2 : withRouteHeader ? headerHeight : insets.top
-  return <ThemedView style={{ flex: 1, paddingTop, paddingBottom: insets.bottom }}>{children}</ThemedView>
+  return (
+    <ThemedView style={{ flex: 1, paddingTop, paddingBottom: Platform.select({ ios: insets.bottom, android: 40 }) }}>{children}</ThemedView>
+  )
 }
 
 Screen.Header = Header

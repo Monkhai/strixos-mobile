@@ -1,31 +1,26 @@
-import { CommonActions, DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native'
+import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native'
 import { useFonts } from 'expo-font'
-import * as NavigationBar from 'expo-navigation-bar'
-import { router, Stack, useLocalSearchParams, useNavigation, usePathname } from 'expo-router'
+import { router, Stack, usePathname } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import { StatusBar } from 'expo-status-bar'
 import { useEffect } from 'react'
 import 'react-native-reanimated'
 
 import { useColorScheme } from '@/hooks/useColorScheme'
+import { useConnectToWebSocket } from '@/hooks/useConnectToWebSocket'
 import ReactQueryProvider, { queryKeyStore } from '@/providers/ReactQueryProvider'
-import { cleanPreferences, getPreferences } from '@/storage/secureStorage'
+import { getPreferences } from '@/storage/secureStorage'
 import { useGlobalStore } from '@/stores/globalStore'
 import { useQuery } from '@tanstack/react-query'
 import { Platform } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
-import { useConnectToWebSocket } from '@/hooks/useConnectToWebSocket'
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync()
-if (Platform.OS === 'android') {
-  NavigationBar.setVisibilityAsync('hidden')
-  NavigationBar.setBehaviorAsync('inset-swipe')
-}
 
 export default function RootLayout() {
   const colorScheme = useColorScheme()
-  const navBarVisibliity = NavigationBar.useVisibility()
+  // const navBarVisibliity = NavigationBar.useVisibility()
   const [loaded] = useFonts({
     babek: require('../assets/fonts/BakbakOne-Regular.ttf'),
   })
@@ -33,18 +28,22 @@ export default function RootLayout() {
   useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync()
+      if (Platform.OS === 'android') {
+        // NavigationBar.setVisibilityAsync('hidden')
+        // NavigationBar.setBehaviorAsync('inset-swipe')
+      }
     }
   }, [loaded])
 
-  useEffect(() => {
-    if (navBarVisibliity === 'visible') {
-      if (Platform.OS === 'android') {
-        setTimeout(() => {
-          NavigationBar.setVisibilityAsync('hidden')
-        }, 2000)
-      }
-    }
-  }, [navBarVisibliity])
+  // useEffect(() => {
+  //   if (navBarVisibliity === 'visible') {
+  //     if (Platform.OS === 'android') {
+  //       setTimeout(() => {
+  //         // NavigationBar.setVisibilityAsync('hidden')
+  //       }, 2000)
+  //     }
+  //   }
+  // }, [navBarVisibliity])
 
   if (!loaded) {
     return null

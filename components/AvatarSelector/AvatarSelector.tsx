@@ -4,7 +4,6 @@ import CustomBottomSheet from '@/components/ui/BottomSheet/BottomSheet'
 import { IconSymbol } from '@/components/ui/IconSymbol'
 import { IconButton } from '@/components/ui/UIButton'
 import { Colors } from '@/constants/Colors'
-import { useGlobalStore } from '@/stores/globalStore'
 import BottomSheet, { BottomSheetFlatList } from '@gorhom/bottom-sheet'
 import { BlurView } from 'expo-blur'
 import React, { useCallback, useMemo, useRef } from 'react'
@@ -17,7 +16,6 @@ interface Props {
 }
 
 export default function AvatarSelector({ avatar, onAvatarSelect }: Props) {
-  const { identity } = useGlobalStore()
   const theme = useColorScheme() ?? 'light'
   const snapPoints = useMemo(() => ['60%'], [])
   const bottomSheetRef = useRef<BottomSheet>(null)
@@ -47,14 +45,14 @@ export default function AvatarSelector({ avatar, onAvatarSelect }: Props) {
           style={styles.iconButton}
         >
           <BlurView
-            experimentalBlurMethod="dimezisBlurView"
+            experimentalBlurMethod="none"
             intensity={Platform.select({
               ios: theme == 'dark' ? 50 : 100,
               android: 100,
             })}
-            style={{ ...StyleSheet.absoluteFillObject }}
+            style={StyleSheet.absoluteFill}
           />
-          <IconSymbol name="pencil" size={24} color={theme === 'dark' ? 'white' : 'black'} />
+          <IconSymbol name="pencil" size={24} color={theme === 'dark' ? Colors.dark.background : 'black'} />
         </IconButton>
       </View>
 
