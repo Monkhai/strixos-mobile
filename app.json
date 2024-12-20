@@ -2,7 +2,7 @@
   "expo": {
     "name": "strixos",
     "slug": "strixos",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "strixos",
@@ -10,9 +10,11 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.yohaiwiener.strixos"
+      "bundleIdentifier": "com.yohaiwiener.strixos",
+      "buildNumber": "1.1.0"
     },
     "android": {
+      "versionCode": 2,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
