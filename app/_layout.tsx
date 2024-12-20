@@ -4,13 +4,13 @@ import * as NavigationBar from 'expo-navigation-bar'
 import { router, Stack, usePathname } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import { StatusBar } from 'expo-status-bar'
-import { useEffect } from 'react'
+import { Fragment, useEffect } from 'react'
 import 'react-native-reanimated'
 
 import { useColorScheme } from '@/hooks/useColorScheme'
 import { useConnectToWebSocket } from '@/hooks/useConnectToWebSocket'
 import ReactQueryProvider, { queryKeyStore } from '@/providers/ReactQueryProvider'
-import { getPreferences } from '@/storage/secureStorage'
+import { cleanPreferences, getPreferences } from '@/storage/secureStorage'
 import { useGlobalStore } from '@/stores/globalStore'
 import { useQuery } from '@tanstack/react-query'
 import { Platform } from 'react-native'
@@ -75,7 +75,7 @@ function Layout() {
   useConnectToWebSocket()
   useEffect(() => {
     if (preferences === null) {
-      router.replace('/setup')
+      router.dismissTo('/setup')
     }
   }, [preferences, path])
 
@@ -85,21 +85,21 @@ function Layout() {
 
   if (preferences === null) {
     return (
-      <>
+      <Fragment>
         <GestureHandlerRootView>
           <Stack initialRouteName="setup">
             <Stack.Screen name="setup" options={{ headerShown: false }} />
           </Stack>
         </GestureHandlerRootView>
         <StatusBar style="auto" />
-      </>
+      </Fragment>
     )
   }
 
-  // cleanPreferences()
+  cleanPreferences()
 
   return (
-    <>
+    <Fragment>
       <GestureHandlerRootView>
         <Stack>
           <Stack.Screen name="index" options={{ animationTypeForReplace: 'pop' }} />
@@ -110,6 +110,6 @@ function Layout() {
         </Stack>
       </GestureHandlerRootView>
       <StatusBar style="auto" />
-    </>
+    </Fragment>
   )
 }

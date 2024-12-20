@@ -45,6 +45,7 @@ export async function getPreferences(): Promise<Preferences | null> {
   if (preferences) {
     try {
       const parsedPreferences = JSON.parse(preferences)
+      console.log('parsedPreferences', parsedPreferences)
       return parsedPreferences
     } catch (error) {
       console.error('error parsing preferences', error)

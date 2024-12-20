@@ -14,11 +14,11 @@ export default function CustomBottomSheet({ bottomSheetRef, ...props }: Props) {
     <Portal>
       <BottomSheet
         index={-1}
+        ref={bottomSheetRef}
         enableContentPanningGesture={false}
         handleComponent={props => <Handle {...props} />}
         enablePanDownToClose
         backdropComponent={p => <BottomSheetBackdrop {...p} appearsOnIndex={0} disappearsOnIndex={-1} />}
-        ref={bottomSheetRef}
         enableDynamicSizing={false}
         handleStyle={{ backgroundColor: Colors[theme].background }}
         backgroundStyle={{ backgroundColor: Colors[theme].background }}

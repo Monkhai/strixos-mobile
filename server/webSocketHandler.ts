@@ -41,14 +41,15 @@ export class WebSocketHandler {
   public async sendMessage(message: ClientMessage): Promise<void> {
     if (this.ws && this.ws.readyState !== WebSocket.CLOSED) {
       try {
-        if (message.type === ClientMessageType.UPDATE_IDENTITY) {
-          const bytes = JSON.stringify(message)
-          this.ws.send(bytes)
-          return
-        }
         const identity = await getIdentity()
         if (!identity) {
           throw new Error('Identity not found')
+        }
+        if (message.type === ClientMessageType.UPDATE_IDENTITY) {
+          const bytes = JSON.stringify({ ...message, identity })
+          console.log(message, 'message')
+          this.ws.send(bytes)
+          return
         }
         const identifiedMessage = { ...message, identity }
         const bytes = JSON.stringify(identifiedMessage)

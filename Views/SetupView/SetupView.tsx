@@ -8,6 +8,7 @@ import Screen from '@/components/ui/screen-template/Screen'
 import UIButton from '@/components/ui/UIButton'
 import { Colors } from '@/constants/Colors'
 import { queryKeyStore } from '@/providers/ReactQueryProvider'
+import { ClientMessageType, UpdateIdentityMessage } from '@/server/messageTypes'
 import { Preferences } from '@/storage/preferencesTypes'
 import { getPreferences, persistPreferences } from '@/storage/secureStorage'
 import { useGlobalStore } from '@/stores/globalStore'
@@ -23,7 +24,7 @@ export default function SetupView() {
   const theme = useColorScheme() ?? 'light'
   const [avatar, setAvatar] = React.useState<keyof typeof avatarsMap>('unknown')
   const [displayName, setDisplayName] = useState('')
-  const { setPreferences } = useGlobalStore()
+  const { setPreferences, identity, ws } = useGlobalStore()
   const queryClient = useQueryClient()
 
   const { data: preferences } = useQuery({
@@ -33,9 +34,9 @@ export default function SetupView() {
 
   useLayoutEffect(() => {
     if (preferences) {
-      router.replace('/')
+      router.dismissTo('/home')
     }
-  }, [preferences])
+  }, [])
 
   const { mutate, isPending } = useMutation({
     mutationFn: async ({ avatar, displayName }: { displayName: string; avatar: keyof typeof avatarsMap }) => {
@@ -47,7 +48,7 @@ export default function SetupView() {
       await persistPreferences({ displayName, preferedAvatar: avatar })
     },
     onSuccess() {
-      router.replace('/')
+      router.dismissTo('/home')
     },
   })
 

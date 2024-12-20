@@ -17,7 +17,7 @@ import { Identity, SafeIdentity } from '@/server/playerTypes'
 import { InitialIdentityMessage, RegisteredMessage } from '@/server/registerFlowMessages'
 import { WebSocketHandler } from '@/server/webSocketHandler'
 import { Preferences } from '@/storage/preferencesTypes'
-import { getIdentity, setIdentity } from '@/storage/secureStorage'
+import { getIdentity, getPreferences, setIdentity } from '@/storage/secureStorage'
 import { getEmptyBoard } from '@/Views/GameView/components/Board/utils'
 import { router } from 'expo-router'
 import { create } from 'zustand'
@@ -80,6 +80,22 @@ export const useGlobalStore = create<StoreType>()((set, get) => ({
           displayName: preferences.displayName,
         },
       })
+
+      const ws = get().ws
+      if (ws) {
+        const updateMessage: UpdateIdentityMessage = {
+          type: ClientMessageType.UPDATE_IDENTITY,
+          content: {
+            identity: {
+              id: identity.id,
+              secret: identity.secret,
+              avatar: preferences.preferedAvatar,
+              displayName: preferences.displayName,
+            },
+          },
+        }
+        ws.sendMessage(updateMessage)
+      }
     }
   },
   resetAllStates() {
@@ -145,6 +161,9 @@ export const useGlobalStore = create<StoreType>()((set, get) => ({
             case ServerMessageType.AUTH_IDENTITY: {
               const { content } = message as InitialIdentityMessage
               const preferences = get().preferences
+
+              console.log(content.identity, 'content received from server')
+
               const updateMessage: UpdateIdentityMessage = {
                 type: ClientMessageType.UPDATE_IDENTITY,
                 content: {

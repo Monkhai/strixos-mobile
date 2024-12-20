@@ -12,7 +12,7 @@ import { Share, View } from 'react-native'
 export default function lobby() {
   return (
     <>
-      <CustomHeader hideRight specialTitle title="Play with a friend" />
+      <CustomHeader hideRight hideLeft specialTitle title="Play with a friend" />
       <LobbyView />
     </>
   )
