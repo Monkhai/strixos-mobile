@@ -7,11 +7,12 @@ import { ClientMessageType, LeaveInviteGameMessage } from '@/server/messageTypes
 import { useGlobalStore } from '@/stores/globalStore'
 import { router } from 'expo-router'
 import React from 'react'
-import { Share, useColorScheme } from 'react-native'
+import { Share } from 'react-native'
 
 export default function LobbyView() {
   const { gameID, ws } = useGlobalStore()
-  const baseUrl = 'strixos://invite-game/'
+  // const baseUrl = 'strixos://invite-game/'
+  const baseUrl = 'https://play.strixos.app/invite-game/'
 
   if (!gameID) {
     router.replace('/home')
@@ -22,6 +23,9 @@ export default function LobbyView() {
     Share.share({
       title: 'Join my game',
       url: baseUrl + gameID,
+      message: 'Join my game: ' + baseUrl + gameID,
+    }).then(act => {
+      console.log(act)
     })
   }
 

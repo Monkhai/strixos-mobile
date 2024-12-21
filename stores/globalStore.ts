@@ -162,8 +162,6 @@ export const useGlobalStore = create<StoreType>()((set, get) => ({
               const { content } = message as InitialIdentityMessage
               const preferences = get().preferences
 
-              console.log(content.identity, 'content received from server')
-
               const updateMessage: UpdateIdentityMessage = {
                 type: ClientMessageType.UPDATE_IDENTITY,
                 content: {

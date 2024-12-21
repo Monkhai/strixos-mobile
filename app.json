@@ -11,7 +11,8 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.yohaiwiener.strixos",
-      "buildNumber": "1.1.0"
+      "buildNumber": "1.1.0",
+      "associatedDomains": ["applinks:play.strixos.app"]
     },
     "android": {
       "versionCode": 2,

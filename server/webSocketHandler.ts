@@ -47,7 +47,6 @@ export class WebSocketHandler {
         }
         if (message.type === ClientMessageType.UPDATE_IDENTITY) {
           const bytes = JSON.stringify({ ...message, identity })
-          console.log(message, 'message')
           this.ws.send(bytes)
           return
         }

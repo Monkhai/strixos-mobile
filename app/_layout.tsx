@@ -96,7 +96,7 @@ function Layout() {
     )
   }
 
-  cleanPreferences()
+  // cleanPreferences()
 
   return (
     <Fragment>
