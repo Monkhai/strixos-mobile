@@ -7,7 +7,6 @@ const PREFERENCES_KEY = 'preferences'
 
 export async function setIdentity(identity: Identity) {
   const preferences = await getPreferences()
-  console.log(identity, 'identity')
   if (preferences && preferences.preferedAvatar) {
     const newIdentity: Identity = { ...identity, avatar: preferences.preferedAvatar }
     await SecureStore.setItemAsync(IDENTITY_KEY, JSON.stringify(newIdentity))
@@ -19,7 +18,6 @@ export async function setIdentity(identity: Identity) {
 export async function getIdentity(): Promise<Identity | null> {
   const identity = await SecureStore.getItemAsync(IDENTITY_KEY)
   if (identity) {
-    console.log('identity')
     try {
       const parsedIdentity = JSON.parse(identity)
       return parsedIdentity
@@ -28,7 +26,6 @@ export async function getIdentity(): Promise<Identity | null> {
       return null
     }
   } else {
-    console.log('no identity')
     return null
   }
 }

@@ -160,7 +160,6 @@ export const useGlobalStore = create<StoreType>()((set, get) => ({
           switch (message.type) {
             case ServerMessageType.AUTH_IDENTITY: {
               const { content } = message as InitialIdentityMessage
-              console.log('auth identity', content)
               const preferences = get().preferences
 
               const updateMessage: UpdateIdentityMessage = {
@@ -179,7 +178,6 @@ export const useGlobalStore = create<StoreType>()((set, get) => ({
             }
             case ServerMessageType.REGISTERED: {
               const { content } = message as RegisteredMessage
-              console.log(content, 'registered')
               void setIdentity(content.identity)
               set({
                 identity: content.identity,

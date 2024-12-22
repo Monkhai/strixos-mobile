@@ -24,8 +24,6 @@ export default function LobbyView() {
       title: 'Join my game',
       url: baseUrl + gameID,
       message: 'Join my game: ' + baseUrl + gameID,
-    }).then(act => {
-      console.log(act)
     })
   }
 
