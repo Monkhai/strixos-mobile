@@ -26,7 +26,7 @@ export default function GameTitle() {
     .pushStyle(
       {
         fontFamilies: ['babekFont'],
-        fontSize: 60,
+        fontSize: 45,
         fontStyle: { weight: 800 },
         color: Skia.Color('white'),
       },
@@ -37,12 +37,12 @@ export default function GameTitle() {
     .build()
 
   return (
-    <Canvas style={{ width: 300, height: 100, marginBottom: -20 }}>
+    <Canvas style={{ width: 300, height: 80, marginBottom: -20 }}>
       <Group opacity={0.8} blendMode={'overlay'}>
-        <Oval opacity={0.5} x={25} y={55} width={170} height={15} style={'fill'}>
+        <Oval opacity={0.5} x={25} y={40} width={170} height={15} style={'fill'}>
           <Shadow shadowOnly blur={10} color={PrimaryColors[theme].x.primary} dx={0} dy={0} />
         </Oval>
-        <Oval opacity={0.5} x={100} y={55} width={170} height={15} style={'fill'}>
+        <Oval opacity={0.5} x={100} y={40} width={170} height={15} style={'fill'}>
           <Shadow shadowOnly blur={10} color={PrimaryColors[theme].o.primary} dx={0} dy={0} />
         </Oval>
       </Group>

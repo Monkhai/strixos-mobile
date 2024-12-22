@@ -1,5 +1,5 @@
 import { getIdentity } from '@/storage/secureStorage'
-import { ClientMessage, ClientMessageType } from './messageTypes'
+import { ClientMessage, ClientMessageType, UpdateIdentityMessage } from './messageTypes'
 
 export class WebSocketHandler {
   private onOpen: () => void
@@ -42,7 +42,7 @@ export class WebSocketHandler {
     if (this.ws && this.ws.readyState !== WebSocket.CLOSED) {
       try {
         const identity = await getIdentity()
-        if (!identity) {
+        if (!identity && !(message as UpdateIdentityMessage).content.identity) {
           throw new Error('Identity not found')
         }
         if (message.type === ClientMessageType.UPDATE_IDENTITY) {
