@@ -31,8 +31,8 @@ export default function IconButton({ children, onPress, rotate }: Props) {
       onPressOut={() => {
         scale.value = withTiming(1)
         degrees.value = withTiming(0)
+        onPress()
       }}
-      onPress={onPress}
     >
       {typeof children === 'function' ? children(h, w) : children}
     </AnimatedPressable>

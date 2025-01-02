@@ -8,11 +8,11 @@ import GameView from './GameView'
 export default function GameViewContainer() {
   const { ws, gameState } = useGlobalStore()
 
+  if (!ws) {
+    router.replace('/home')
+    return null
+  }
   if (gameState === GameState.WAITING) {
-    if (!ws) {
-      router.replace('/')
-      return null
-    }
     return <LoadingGameView />
   }
   if (([GameState.FINISHED, GameState.PLAYING, GameState.OPPONENT_DISCONNECTED] as Array<GameState>).includes(gameState)) {

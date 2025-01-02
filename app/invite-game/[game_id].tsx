@@ -10,7 +10,7 @@ import { router, useLocalSearchParams, useNavigation } from 'expo-router'
 import React, { useEffect } from 'react'
 
 export default function Page() {
-  const { ws, createWSConnection } = useGlobalStore()
+  const { ws } = useGlobalStore()
   const { game_id } = useLocalSearchParams<{ game_id: string }>()
 
   const joinGame = () => {

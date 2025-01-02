@@ -13,10 +13,14 @@ import ReactQueryProvider, { queryKeyStore } from '@/providers/ReactQueryProvide
 import { cleanPreferences, getPreferences } from '@/storage/secureStorage'
 import { useGlobalStore } from '@/stores/globalStore'
 import { useQuery } from '@tanstack/react-query'
-import { Platform } from 'react-native'
+import { I18nManager, Platform } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
+if (I18nManager.isRTL) {
+  I18nManager.allowRTL(false)
+  I18nManager.forceRTL(false)
+}
 SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
@@ -29,22 +33,22 @@ export default function RootLayout() {
   useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync()
-      if (Platform.OS === 'android') {
-        NavigationBar.setVisibilityAsync('hidden')
-        NavigationBar.setBehaviorAsync('inset-swipe')
-      }
+      // if (Platform.OS === 'android') {
+      //   NavigationBar.setVisibilityAsync('hidden')
+      //   NavigationBar.setBehaviorAsync('inset-swipe')
+      // }
     }
   }, [loaded])
 
-  useEffect(() => {
-    if (navBarVisibliity === 'visible') {
-      if (Platform.OS === 'android') {
-        setTimeout(() => {
-          NavigationBar.setVisibilityAsync('hidden')
-        }, 2000)
-      }
-    }
-  }, [navBarVisibliity])
+  // useEffect(() => {
+  //   if (navBarVisibliity === 'visible') {
+  //     if (Platform.OS === 'android') {
+  //       setTimeout(() => {
+  //         NavigationBar.setVisibilityAsync('hidden')
+  //       }, 2000)
+  //     }
+  //   }
+  // }, [navBarVisibliity])
 
   if (!loaded) {
     return null

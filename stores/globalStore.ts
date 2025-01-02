@@ -152,6 +152,7 @@ export const useGlobalStore = create<StoreType>()((set, get) => ({
       },
       onClose() {
         get().resetAllStates()
+        get().createWSConnection()
       },
       onMessage(event) {
         try {
@@ -281,5 +282,6 @@ export const useGlobalStore = create<StoreType>()((set, get) => ({
       },
     })
     set({ ws })
+    ws.connect(WS_URL)
   },
 }))

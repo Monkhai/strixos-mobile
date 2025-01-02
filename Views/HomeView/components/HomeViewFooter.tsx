@@ -23,7 +23,7 @@ export default function HomeViewFooter({ isConnecting, setIsConnecting }: Props)
       return
     }
     setIsConnecting(true)
-    if (ws) {
+    if (ws && ws.getReadyState() !== WebSocket.OPEN) {
       ws.connect(WS_URL)
     }
     const second = 1000
