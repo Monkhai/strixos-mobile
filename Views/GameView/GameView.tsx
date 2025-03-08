@@ -4,6 +4,7 @@ import React from 'react'
 import Board from './components/Board/Board'
 import GameViewFooter from './components/GameViewFooter'
 import GameViewHeader from './components/GameViewHeader/GameViewHeader'
+import { GameState } from '@/server/gameTypes'
 
 export default function GameView() {
   const { activePlayer, identity, board, sendMove, gameState } = useGlobalStore()
@@ -14,7 +15,12 @@ export default function GameView() {
         <GameViewHeader />
       </Screen.Header>
       <Screen.Body>
-        <Board board={board} isDisabled={activePlayer?.id !== identity?.id || gameState !== 'playing'} onMove={sendMove} />
+        <Board
+          isPlaying={gameState === GameState.PLAYING}
+          board={board}
+          isDisabled={activePlayer?.id !== identity?.id || gameState !== 'playing'}
+          onMove={sendMove}
+        />
       </Screen.Body>
       <Screen.Footer>
         <GameViewFooter />

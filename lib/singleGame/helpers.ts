@@ -1,3 +1,4 @@
+import { Board } from '@/server/gameTypes'
 import * as readline from 'node:readline'
 
 export const markLives = {
@@ -9,15 +10,11 @@ export const markLives = {
   6: 6,
   7: 7,
 }
-export const INITIAL_LIVES = 7
+export const INITIAL_LIVES = 6
 export type Mark = 'x' | 'o'
 
 export const X = 'x' as Mark
 export const O = 'o' as Mark
-
-export type Cell = { mark: Mark; lives: number } | null
-export type Row = [Cell, Cell, Cell]
-export type Board = [Row, Row, Row]
 
 export type ValidIndex = 0 | 1 | 2
 
@@ -27,9 +24,21 @@ export type Point = [RowPoint, ColPoint]
 
 export function getEmptyBoard(): Board {
   return [
-    [null, null, null],
-    [null, null, null],
-    [null, null, null],
+    [
+      { value: '-', winState: false, lives: INITIAL_LIVES },
+      { value: '-', winState: false, lives: INITIAL_LIVES },
+      { value: '-', winState: false, lives: INITIAL_LIVES },
+    ],
+    [
+      { value: '-', winState: false, lives: INITIAL_LIVES },
+      { value: '-', winState: false, lives: INITIAL_LIVES },
+      { value: '-', winState: false, lives: INITIAL_LIVES },
+    ],
+    [
+      { value: '-', winState: false, lives: INITIAL_LIVES },
+      { value: '-', winState: false, lives: INITIAL_LIVES },
+      { value: '-', winState: false, lives: INITIAL_LIVES },
+    ],
   ]
 }
 
@@ -88,5 +97,9 @@ export async function getUserMarkIO(rl: readline.Interface, count = 0): Promise<
 }
 
 export function formatBoard(board: Board): string {
-  return board.map(row => row.map(cell => (cell === null ? '-' : cell.mark)).join(' | ')).join('\n---------\n')
+  return board.map(row => row.map(cell => (cell === null ? '-' : cell.value)).join(' | ')).join('\n---------\n')
+}
+
+export function sleep(seconds: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, seconds * 1000))
 }

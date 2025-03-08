@@ -73,13 +73,19 @@ export default function HomeViewFooter({ isConnecting, setIsConnecting }: Props)
   }
 
   if (connectionState !== WebSocket.OPEN) {
-    return <PrimaryButton onPress={retryConnection} isLoading={isConnecting} wide label={isConnecting ? 'Connecting' : 'Connect'} />
+    return (
+      <View style={{ width: '50%', gap: 20 }}>
+        <SecondaryButton onPress={() => router.replace('/single-game')} label="Play alone" />
+        <PrimaryButton onPress={retryConnection} isLoading={isConnecting} wide label={isConnecting ? 'Connecting' : 'Connect'} />
+      </View>
+    )
   }
 
   return (
     <View style={{ width: '50%', gap: 20 }}>
       <PrimaryButton onPress={playGame} label="Play online" />
       <SecondaryButton onPress={createInviteGame} label="Play with a friend" />
+      <SecondaryButton onPress={() => router.replace('/single-game')} label="Play alone" />
     </View>
   )
 }

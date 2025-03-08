@@ -152,7 +152,9 @@ export const useGlobalStore = create<StoreType>()((set, get) => ({
       },
       onClose() {
         get().resetAllStates()
-        get().createWSConnection()
+        setTimeout(() => {
+          get().createWSConnection()
+        }, 5000)
       },
       onMessage(event) {
         try {
@@ -281,7 +283,9 @@ export const useGlobalStore = create<StoreType>()((set, get) => ({
         }
       },
     })
-    set({ ws })
-    ws.connect(WS_URL)
+    if (get().connectionState === WebSocket.CLOSED) {
+      set({ ws })
+      ws.connect(WS_URL)
+    }
   },
 }))

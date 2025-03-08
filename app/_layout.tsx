@@ -66,6 +66,7 @@ export default function RootLayout() {
 function Layout() {
   const path = usePathname()
   const { setPreferences } = useGlobalStore()
+  useConnectToWebSocket()
   const { data: preferences } = useQuery({
     queryKey: queryKeyStore.preferences,
     queryFn: async () => {
@@ -76,8 +77,10 @@ function Layout() {
       return preferences
     },
   })
-  useConnectToWebSocket()
   useEffect(() => {
+    if (path === '/setup') {
+      return
+    }
     if (preferences === null) {
       router.dismissTo('/setup')
     }
@@ -109,6 +112,7 @@ function Layout() {
           <Stack.Screen name="index" options={{ animationTypeForReplace: 'pop' }} />
           <Stack.Screen name="home" options={{ animationTypeForReplace: 'pop' }} />
           <Stack.Screen name="game" options={{ headerShown: false, presentation: 'fullScreenModal' }} />
+          <Stack.Screen name="single-game" options={{ headerShown: false, presentation: 'fullScreenModal' }} />
           <Stack.Screen name="settings" options={{ presentation: 'fullScreenModal' }} />
           <Stack.Screen name="invite-game" options={{ headerShown: false, animation: 'slide_from_bottom' }} />
         </Stack>

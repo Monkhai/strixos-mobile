@@ -13,7 +13,7 @@ export default function FakeGameView() {
         <GameViewHeader />
       </View>
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Board board={getEmptyBoard()} isDisabled={true} onMove={() => {}} />
+        <Board isPlaying={false} board={getEmptyBoard()} isDisabled={true} onMove={() => {}} />
       </View>
       <View style={{ flex: 1, width: '100%', justifyContent: 'center', alignItems: 'center' }}>
         <GameViewFooter />

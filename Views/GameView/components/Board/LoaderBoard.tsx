@@ -66,7 +66,7 @@ export default function LoaderBoard({ hideCells = false }: Props) {
 
   return (
     <Animated.View entering={FadeIn} exiting={FadeOut} style={{ justifyContent: 'center', alignItems: 'center' }}>
-      <BoardComponent hideCells={hideCells} isDisabled board={board} onMove={() => {}} />
+      <BoardComponent isPlaying={false} hideCells={hideCells} isDisabled board={board} onMove={() => {}} />
     </Animated.View>
   )
 }

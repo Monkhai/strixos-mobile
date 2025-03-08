@@ -15,9 +15,10 @@ interface Props {
   lives: number
   isDisabled: boolean
   hideCell?: boolean
+  isPlaying: boolean
 }
 
-export default function CellContainer({ lives, onPress, value, win, hideCell = false }: Props) {
+export default function CellContainer({ lives, onPress, value, win, hideCell = false, isPlaying, isDisabled }: Props) {
   const theme = useColorScheme() ?? 'light'
   const val = useSharedValue(1)
   const animatedStyle = useAnimatedStyle(() => {
@@ -42,24 +43,19 @@ export default function CellContainer({ lives, onPress, value, win, hideCell = f
   }, [value])
 
   return (
-    <AnimatedPressable
-      onPress={() => {
-        onPress()
-      }}
-      style={[{}, animatedStyle, styles.container]}
-    >
-      {hideCell ? null : <Cell lives={lives} value={value} />}
+    <AnimatedPressable onPress={onPress} style={[animatedStyle, styles.container]} disabled={isDisabled}>
+      {hideCell ? null : <Cell lives={lives} value={value} isPlaying={isPlaying} />}
     </AnimatedPressable>
   )
 }
 
-function Cell({ lives, value }: { lives: number; value: RowMark }) {
+function Cell({ lives, value, isPlaying }: { lives: number; value: RowMark; isPlaying: boolean }) {
   switch (value) {
     case 'o': {
-      return <OCell dying={lives === 0} containerSize={50} />
+      return <OCell dying={lives === 0} containerSize={50} isPlaying={isPlaying} />
     }
     case 'x': {
-      return <XCell dying={lives === 0} containerSize={50} />
+      return <XCell dying={lives === 0} containerSize={50} isPlaying={isPlaying} />
     }
 
     default: {

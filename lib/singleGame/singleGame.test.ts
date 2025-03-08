@@ -1,5 +1,5 @@
 import { getEmptyBoard, INITIAL_LIVES, markLives, type Board, type Cell, type Mark, type Point } from './helpers'
-import { Game } from './singleGame'
+import { SingleGame } from './singleGame'
 import { isDeepStrictEqual } from 'node:util'
 
 const xCell: Cell = { mark: 'x', lives: INITIAL_LIVES }
@@ -10,7 +10,7 @@ function getCellWithLives(mark: Mark, lives: keyof typeof markLives): Cell {
 }
 
 test('new Game()', () => {
-  const game = new Game('x', 'o', getEmptyBoard())
+  const game = new SingleGame('x', 'o', getEmptyBoard())
 
   expect(game.getUserMark()).toBe('x')
   expect(game.getComputerMark()).toBe('o')
@@ -41,7 +41,7 @@ test('game.getBoard', () => {
     },
   ]
   tests.forEach(({ expectedBoard }) => {
-    const game = new Game('x', 'o', expectedBoard)
+    const game = new SingleGame('x', 'o', expectedBoard)
     const gameBoard = game.getBoard()
     expect(isDeepStrictEqual(gameBoard, expectedBoard)).toBe(true)
   })
@@ -79,7 +79,7 @@ test('game.makeComputerMove', () => {
   ]
 
   tests.forEach((t, i) => {
-    const game = new Game('x', 'o', t.initialBoard)
+    const game = new SingleGame('x', 'o', t.initialBoard)
 
     game.makeComputerMove()
     const board = game.getBoard()
@@ -141,7 +141,7 @@ test('game.makeUserMove', () => {
   ]
 
   tests.forEach(t => {
-    const game = new Game('x', 'o', t.initialBoard)
+    const game = new SingleGame('x', 'o', t.initialBoard)
 
     const isValid = game.makeUserMove(t.point)
     expect(isValid).toBe(t.isValidPoint)
@@ -170,7 +170,7 @@ test('game.isBoardFull', () => {
     },
   ]
   tests.forEach(({ board, expected }) => {
-    const game = new Game('x', 'o', board)
+    const game = new SingleGame('x', 'o', board)
     expect(game.isBoardFull()).toBe(expected)
   })
 })
@@ -197,7 +197,7 @@ test('game.checkWin', () => {
     },
   ]
   tests.forEach(({ board, expected, mark }) => {
-    const game = new Game('x', 'o', board)
+    const game = new SingleGame('x', 'o', board)
     expect(game.checkWin(mark)).toBe(expected)
   })
 })
@@ -242,7 +242,7 @@ test('game.updateLives', () => {
     },
   ]
   tests.forEach(({ initialBoard, expected }) => {
-    const game = new Game('x', 'o', initialBoard)
+    const game = new SingleGame('x', 'o', initialBoard)
     game.updateLives()
     expect(isDeepStrictEqual(expected, initialBoard)).toBe(true)
   })

@@ -2,10 +2,10 @@ import { GameState } from '@/server/gameTypes'
 import { useGlobalStore } from '@/stores/globalStore'
 import { Canvas, LinearGradient, Oval, Path, Shadow, Skia, vec } from '@shopify/react-native-skia'
 import React, { useEffect, useMemo } from 'react'
-import { Pressable } from 'react-native'
 import Animated, { useAnimatedStyle, useDerivedValue, useSharedValue, withRepeat, withSpring, withTiming } from 'react-native-reanimated'
 
 interface Props {
+  isPlaying: boolean
   containerSize?: number
   dying: boolean
 }
@@ -16,7 +16,7 @@ const colors = {
   shadow: '#F66E2820',
 }
 
-export default function OCell({ dying, containerSize = 50 }: Props) {
+export default function OCell({ dying, containerSize = 50, isPlaying }: Props) {
   const { gameState } = useGlobalStore()
   const v = useSharedValue(0)
   const containerOpacity = useSharedValue(1)
@@ -51,12 +51,12 @@ export default function OCell({ dying, containerSize = 50 }: Props) {
   }, [])
 
   useEffect(() => {
-    if (dying && gameState === GameState.PLAYING) {
+    if (dying && isPlaying) {
       containerOpacity.value = withRepeat(withTiming(0.3, { duration: 800 }), -1, true)
     } else {
       containerOpacity.value = withTiming(1)
     }
-  }, [dying, gameState])
+  }, [dying, isPlaying])
 
   return (
     <Animated.View style={[{ height: size, width: size, paddingTop: containerSize * 0.15 }, style]}>

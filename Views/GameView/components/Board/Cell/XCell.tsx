@@ -9,6 +9,7 @@ import Animated, { useAnimatedStyle, useDerivedValue, useSharedValue, withRepeat
 interface Props {
   containerSize?: number
   dying: boolean
+  isPlaying: boolean
 }
 
 const colors = {
@@ -17,7 +18,7 @@ const colors = {
   shadow: '#3973FF20',
 }
 
-export default function XCell({ dying, containerSize = 50 }: Props) {
+export default function XCell({ dying, containerSize = 50, isPlaying }: Props) {
   const { gameState } = useGlobalStore()
   const v = useSharedValue(0)
   const containerOpacity = useSharedValue(1)
@@ -63,12 +64,12 @@ export default function XCell({ dying, containerSize = 50 }: Props) {
   }, [])
 
   useEffect(() => {
-    if (dying && gameState === GameState.PLAYING) {
+    if (dying && isPlaying) {
       containerOpacity.value = withRepeat(withTiming(0.3, { duration: 800 }), -1, true)
     } else {
       containerOpacity.value = withTiming(1)
     }
-  }, [dying, gameState])
+  }, [dying, isPlaying])
 
   return (
     <Animated.View style={[{ height: size, width: size, paddingTop: containerSize * 0.15 }, style]}>

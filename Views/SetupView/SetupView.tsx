@@ -20,11 +20,10 @@ import { Keyboard, Platform, Pressable, StyleSheet, Text, TextInput, useColorSch
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function SetupView() {
-  const insets = useSafeAreaInsets()
   const theme = useColorScheme() ?? 'light'
   const [avatar, setAvatar] = React.useState<keyof typeof avatarsMap>('unknown')
   const [displayName, setDisplayName] = useState('')
-  const { setPreferences, identity, ws } = useGlobalStore()
+  const { setPreferences } = useGlobalStore()
   const queryClient = useQueryClient()
 
   const { data: preferences } = useQuery({
