@@ -71,14 +71,12 @@ export const useSingleGameStore = create<StoreType>()((set, get) => ({
     const userWon = game.checkWin(game.getUserMark())
     // // if yes, break
     if (userWon) {
-      console.log('user won')
       set({ gameState: SingleGameState.FINISHED, gameWinner: Player.USER })
       return
     }
 
     // check if board is full
     if (game.isBoardFull()) {
-      console.log('board is full')
       set({ gameState: SingleGameState.FINISHED })
       return
     }
@@ -98,14 +96,12 @@ export const useSingleGameStore = create<StoreType>()((set, get) => ({
     const computerWon = game.checkWin(game.getComputerMark())
     // // if yes, break
     if (computerWon) {
-      console.log('computer won')
       set({ gameState: SingleGameState.FINISHED })
     }
     // check if draw (board full)
     const isDraw = game.isBoardFull()
     // // if yes, break
     if (isDraw) {
-      console.log('draw')
       set({ gameState: SingleGameState.FINISHED })
     }
 
