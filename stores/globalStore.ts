@@ -37,8 +37,9 @@ interface StoreType {
   gameID: string | null
   newGameID: string | null
   isInviteGame: boolean
+  reconnectionAttempts: number
 
-  createWSConnection: () => void
+  createWSConnection: (count: number) => void
   setWsHandler: (wsHandler: WebSocketHandler) => void
   resetAllStates: () => void
   sendMove: (row: number, col: number) => void
@@ -50,6 +51,7 @@ export const useGlobalStore = create<StoreType>()((set, get) => ({
   //websocket
   ws: null,
   connectionState: WebSocket.CLOSED,
+  reconnectionAttempts: 0,
 
   //game state
   activePlayer: null,
@@ -101,11 +103,10 @@ export const useGlobalStore = create<StoreType>()((set, get) => ({
     }
   },
   resetAllStates() {
-    getIdentity().then(identity => {
-      if (identity) {
-        set({ identity })
-      }
-    })
+    const identity = getIdentity()
+    if (identity) {
+      set({ identity })
+    }
 
     set({
       board: getEmptyBoard(),
@@ -144,19 +145,60 @@ export const useGlobalStore = create<StoreType>()((set, get) => ({
     void get().ws?.sendMessage(moveMessage)
   },
 
-  createWSConnection() {
+  createWSConnection(count: number = 0) {
+    // Track reconnection attempts globally
+    set({ reconnectionAttempts: count })
+
+    // Don't create a new connection if one already exists
+    const existingWs = get().ws
+    if (existingWs) {
+      console.log('[Store] WebSocket handler already exists, not creating new one')
+      // If there's an existing handler but it's closed, try to reconnect
+      if (existingWs.getReadyState() === WebSocket.CLOSED) {
+        console.log('[Store] Existing WebSocket is closed, attempting to reconnect')
+        const err = existingWs.connect(WS_URL)
+        if (err) {
+          console.error('[Store] Error reconnecting:', err)
+        }
+      }
+      return
+    }
+
+    console.log('[Store] Creating new WebSocketHandler')
     const ws = new WebSocketHandler({
       onError() {
-        set({ error: 'WebSocket Error Occured' })
+        set({
+          error: 'WebSocket Error Occurred',
+          connectionState: WebSocket.CLOSED,
+        })
       },
       onOpen() {
-        set({ connectionState: WebSocket.OPEN })
+        set({
+          connectionState: WebSocket.OPEN,
+          error: null,
+          reconnectionAttempts: 0,
+        })
       },
       onClose() {
-        get().resetAllStates()
-        setTimeout(() => {
-          get().createWSConnection()
-        }, 5000)
+        console.log('[Store] WebSocket connection closed')
+
+        const currentAttempts = get().reconnectionAttempts || 0
+        set({
+          connectionState: WebSocket.CLOSED,
+          reconnectionAttempts: currentAttempts + 1,
+        })
+
+        set({
+          board: getEmptyBoard(),
+          mark: 'unknown',
+          activePlayer: null,
+          gameState: GameState.NONE,
+          opponentIdentity: null,
+          gameWinner: null,
+          gameID: null,
+          newGameID: null,
+          isInviteGame: false,
+        })
       },
       onMessage(event) {
         try {
@@ -165,8 +207,12 @@ export const useGlobalStore = create<StoreType>()((set, get) => ({
           switch (message.type) {
             case ServerMessageType.AUTH_IDENTITY: {
               const { content } = message as InitialIdentityMessage
-              const preferences = get().preferences
-
+              const preferences = getPreferences()
+              if (!preferences) {
+                console.error('[Store] No preferences found')
+                return
+              }
+              set({ preferences })
               const updateMessage: UpdateIdentityMessage = {
                 type: ClientMessageType.UPDATE_IDENTITY,
                 content: {
@@ -185,7 +231,7 @@ export const useGlobalStore = create<StoreType>()((set, get) => ({
             //--------------------------------------
             case ServerMessageType.REGISTERED: {
               const { content } = message as RegisteredMessage
-              void setIdentity(content.identity)
+              setIdentity(content.identity)
               set({
                 identity: content.identity,
               })
@@ -303,7 +349,6 @@ export const useGlobalStore = create<StoreType>()((set, get) => ({
             //--------------------------------------
             //--------------------------------------
             default: {
-              console.error('Unknown message type', message)
             }
           }
         } catch (error) {

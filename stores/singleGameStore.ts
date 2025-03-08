@@ -1,8 +1,6 @@
 import { Point, sleep, ValidIndex } from '@/lib/singleGame/helpers'
 import { SingleGame } from '@/lib/singleGame/singleGame'
 import { Board, Mark } from '@/server/gameTypes'
-import { Identity } from '@/server/playerTypes'
-import { getIdentity } from '@/storage/secureStorage'
 import { getEmptyBoard } from '@/Views/GameView/components/Board/utils'
 import { create } from 'zustand'
 

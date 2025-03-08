@@ -25,7 +25,6 @@ SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
   const colorScheme = useColorScheme()
-  const navBarVisibliity = NavigationBar.useVisibility()
   const [loaded] = useFonts({
     babek: require('../assets/fonts/BakbakOne-Regular.ttf'),
   })
@@ -33,22 +32,8 @@ export default function RootLayout() {
   useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync()
-      // if (Platform.OS === 'android') {
-      //   NavigationBar.setVisibilityAsync('hidden')
-      //   NavigationBar.setBehaviorAsync('inset-swipe')
-      // }
     }
   }, [loaded])
-
-  // useEffect(() => {
-  //   if (navBarVisibliity === 'visible') {
-  //     if (Platform.OS === 'android') {
-  //       setTimeout(() => {
-  //         NavigationBar.setVisibilityAsync('hidden')
-  //       }, 2000)
-  //     }
-  //   }
-  // }, [navBarVisibliity])
 
   if (!loaded) {
     return null
@@ -65,18 +50,9 @@ export default function RootLayout() {
 
 function Layout() {
   const path = usePathname()
-  const { setPreferences } = useGlobalStore()
   useConnectToWebSocket()
-  const { data: preferences } = useQuery({
-    queryKey: queryKeyStore.preferences,
-    queryFn: async () => {
-      const preferences = await getPreferences()
-      if (preferences) {
-        setPreferences(preferences)
-      }
-      return preferences
-    },
-  })
+  const preferences = getPreferences()
+
   useEffect(() => {
     if (path === '/setup') {
       return

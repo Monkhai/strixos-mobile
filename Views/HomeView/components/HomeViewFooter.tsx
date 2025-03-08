@@ -13,47 +13,72 @@ interface Props {
 }
 
 export default function HomeViewFooter({ isConnecting, setIsConnecting }: Props) {
-  const ws = useGlobalStore(s => s.ws)
-  const connectionState = useGlobalStore(s => s.connectionState)
-  const createWSConnection = useGlobalStore(s => s.createWSConnection)
+  const { ws, connectionState, createWSConnection } = useGlobalStore()
 
-  const retryConnection = () => {
+  function retryConnection() {
+    setIsConnecting(true)
+
+    // If there's no WebSocket handler, create one
     if (!ws) {
-      createWSConnection()
+      createWSConnection(0)
+      // Set a timeout to check if connection succeeded
+      setTimeout(() => {
+        const connectionState = useGlobalStore.getState().connectionState
+        if (connectionState !== WebSocket.OPEN) {
+          setIsConnecting(false)
+          showConnectionError()
+        } else {
+          setIsConnecting(false)
+        }
+      }, 10000) // 10 seconds timeout
       return
     }
-    setIsConnecting(true)
-    if (ws && ws.getReadyState() !== WebSocket.OPEN) {
-      ws.connect(WS_URL)
-    }
-    const second = 1000
-    const minute = second * 60
 
-    let i: NodeJS.Timeout
-    let t: NodeJS.Timeout
-
-    i = setInterval(() => {
-      if (ws && ws.getReadyState() !== WebSocket.OPEN) {
-        ws.connect(WS_URL)
-      } else {
-        clearInterval(i)
-        clearTimeout(t)
-        setIsConnecting(false)
+    // If there is a handler but it's not connected, try to connect
+    if (ws.getReadyState() !== WebSocket.OPEN) {
+      const err = ws.connect(WS_URL)
+      if (err) {
+        return
       }
-    }, 5 * second)
 
-    t = setTimeout(() => {
+      // Set a reasonable timeout for connection
+      const connectionTimeout = 15000 // 15 seconds
+
+      // Clear any existing intervals/timeouts
+      let connectionCheckInterval: NodeJS.Timeout | null = null
+      let connectionTimeoutId: NodeJS.Timeout | null = null
+
+      // Check connection state periodically
+      connectionCheckInterval = setInterval(() => {
+        if (ws.getReadyState() === WebSocket.OPEN) {
+          setIsConnecting(false)
+          if (connectionCheckInterval) clearInterval(connectionCheckInterval)
+          if (connectionTimeoutId) clearTimeout(connectionTimeoutId)
+        }
+      }, 1000)
+
+      // Set timeout for giving up
+      connectionTimeoutId = setTimeout(() => {
+        if (connectionCheckInterval) clearInterval(connectionCheckInterval)
+        setIsConnecting(false)
+        showConnectionError()
+      }, connectionTimeout)
+    } else {
+      // Already connected
       setIsConnecting(false)
-      clearInterval(i)
-      Alert.alert(
-        'Something went wrong',
-        'Could not connect',
-        Platform.select({
-          android: [{ isPreferred: true, text: 'RETRY', onPress: retryConnection }, { text: 'OK' }],
-          ios: [{ text: 'OK' }, { isPreferred: true, text: 'Retry', onPress: retryConnection }],
-        })
-      )
-    }, minute)
+    }
+  }
+
+  // Helper function to show connection error alert
+  const showConnectionError = () => {
+    Alert.alert(
+      'Connection Failed',
+      'Could not connect to the server. Please check your internet connection and try again.',
+      Platform.select({
+        android: [{ isPreferred: true, text: 'RETRY', onPress: retryConnection }, { text: 'OK' }],
+        ios: [{ text: 'OK' }, { isPreferred: true, text: 'Retry', onPress: retryConnection }],
+      })
+    )
   }
 
   function playGame() {

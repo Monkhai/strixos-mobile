@@ -1,9 +1,8 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-import IconButton from './IconButton'
-import Avatar from '../Avatar'
 import { useGlobalStore } from '@/stores/globalStore'
 import { router } from 'expo-router'
+import React from 'react'
+import Avatar from '../Avatar'
+import IconButton from './IconButton'
 
 export default function SettingsButton() {
   const { preferences } = useGlobalStore()
