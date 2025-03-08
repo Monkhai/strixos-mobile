@@ -3,8 +3,10 @@ import React, { useState } from 'react'
 import LoaderBoard from '../GameView/components/Board/LoaderBoard'
 import HomeViewFooter from './components/HomeViewFooter'
 import HomeViewHeader from './components/HomeViewHeader'
+import { useGlobalStore } from '@/stores/globalStore'
 
 export default function HomeView() {
+  const { identity } = useGlobalStore()
   const [isConnecting, setIsConnecting] = useState(false)
 
   return (

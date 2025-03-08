@@ -19,7 +19,6 @@ export enum Player {
 
 interface StoreType {
   game: SingleGame | null
-  identity: Identity | null
   mark: Mark | 'unknown'
   activePlayer: Player | null
   gameState: SingleGameState
@@ -33,19 +32,21 @@ interface StoreType {
 
 export const useSingleGameStore = create<StoreType>()((set, get) => ({
   game: null,
-  identity: null,
   mark: 'unknown',
   activePlayer: null,
   gameState: SingleGameState.NONE,
   board: getEmptyBoard(),
   gameWinner: null,
 
-  //actions
+  //--------------------------------------
+  //----------------Actions---------------
+  //--------------------------------------
   newGame(userMark: Mark) {
     const computerMark: Mark = userMark === 'o' ? 'x' : 'o'
     const game = new SingleGame(userMark, computerMark, getEmptyBoard())
-    set({ game, gameState: SingleGameState.PLAYING, activePlayer: Player.USER })
+    set({ game, gameState: SingleGameState.PLAYING, activePlayer: Player.USER, mark: userMark })
   },
+  //--------------------------------------
   //--------------------------------------
   async playTurn(row: number, col: number): Promise<void> {
     const game = get().game
@@ -111,12 +112,8 @@ export const useSingleGameStore = create<StoreType>()((set, get) => ({
     set({ activePlayer: Player.USER })
   },
   //--------------------------------------
+  //--------------------------------------
   resetAllStates() {
-    getIdentity().then(identity => {
-      if (identity) {
-        set({ identity })
-      }
-    })
     set({
       board: getEmptyBoard(),
       mark: 'unknown',

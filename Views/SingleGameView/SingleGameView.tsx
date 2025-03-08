@@ -3,8 +3,9 @@ import { Player, SingleGameState, useSingleGameStore } from '@/stores/singleGame
 import React, { useEffect } from 'react'
 import Board from '../GameView/components/Board/Board'
 import GameViewHeader from '../GameView/components/GameViewHeader/GameViewHeader'
+import SingleGameViewHeader from './components/SingleGameHeader/SingleGameHeader'
 export default function SingleGameView() {
-  const { board, activePlayer, identity, gameState, playTurn, newGame, game } = useSingleGameStore()
+  const { board, activePlayer, gameState, playTurn, newGame, game } = useSingleGameStore()
 
   useEffect(() => {
     if (!game) {
@@ -12,12 +13,10 @@ export default function SingleGameView() {
     }
   }, [game])
 
-  console.log(activePlayer)
-
   return (
     <Screen>
       <Screen.Header>
-        <GameViewHeader />
+        <SingleGameViewHeader />
       </Screen.Header>
       <Screen.Body>
         <Board

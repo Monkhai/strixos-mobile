@@ -83,18 +83,20 @@ export const useGlobalStore = create<StoreType>()((set, get) => ({
 
       const ws = get().ws
       if (ws) {
-        const updateMessage: UpdateIdentityMessage = {
-          type: ClientMessageType.UPDATE_IDENTITY,
-          content: {
-            identity: {
-              id: identity.id,
-              secret: identity.secret,
-              avatar: preferences.preferedAvatar,
-              displayName: preferences.displayName,
+        if (ws.getReadyState() === WebSocket.OPEN) {
+          const updateMessage: UpdateIdentityMessage = {
+            type: ClientMessageType.UPDATE_IDENTITY,
+            content: {
+              identity: {
+                id: identity.id,
+                secret: identity.secret,
+                avatar: preferences.preferedAvatar,
+                displayName: preferences.displayName,
+              },
             },
-          },
+          }
+          ws.sendMessage(updateMessage)
         }
-        ws.sendMessage(updateMessage)
       }
     }
   },
@@ -179,6 +181,8 @@ export const useGlobalStore = create<StoreType>()((set, get) => ({
               ws.sendMessage(updateMessage)
               break
             }
+            //--------------------------------------
+            //--------------------------------------
             case ServerMessageType.REGISTERED: {
               const { content } = message as RegisteredMessage
               void setIdentity(content.identity)
@@ -187,6 +191,8 @@ export const useGlobalStore = create<StoreType>()((set, get) => ({
               })
               break
             }
+            //--------------------------------------
+            //--------------------------------------
             case ServerMessageType.START_GAME: {
               const { content } = message as StartGameMessage
               set({
@@ -200,12 +206,16 @@ export const useGlobalStore = create<StoreType>()((set, get) => ({
               router.dismissTo('/game', { withAnchor: true })
               break
             }
+            //--------------------------------------
+            //--------------------------------------
             case ServerMessageType.INVITE_GAME_CREATED: {
               const { content } = message as InviteGameCreatedMessage
               set({ gameID: content.gameID })
               router.replace(`/invite-game/lobby`)
               break
             }
+            //--------------------------------------
+            //--------------------------------------
             case ServerMessageType.INVITE_GAME_OVER: {
               const { content } = message as InviteGameOverMessage
               set({
@@ -217,6 +227,8 @@ export const useGlobalStore = create<StoreType>()((set, get) => ({
               })
               break
             }
+            //--------------------------------------
+            //--------------------------------------
             case ServerMessageType.UPDATE: {
               const { content } = message as UpdateMessage
               set({
@@ -225,9 +237,9 @@ export const useGlobalStore = create<StoreType>()((set, get) => ({
               })
               break
             }
+            //--------------------------------------
+            //--------------------------------------
             case ServerMessageType.GAME_CLOSED: {
-              // this is a message from the server to notify that the other player
-              // has disconnected and the game is over
               set({
                 board: getEmptyBoard(),
                 mark: 'unknown',
@@ -236,6 +248,8 @@ export const useGlobalStore = create<StoreType>()((set, get) => ({
               })
               break
             }
+            //--------------------------------------
+            //--------------------------------------
             case ServerMessageType.GAME_OVER: {
               const { content } = message as GameOverMessage
               set({
@@ -245,35 +259,49 @@ export const useGlobalStore = create<StoreType>()((set, get) => ({
               })
               break
             }
+            //--------------------------------------
+            //--------------------------------------
             case ServerMessageType.GAME_WAITING: {
               set({ gameState: GameState.WAITING })
               break
             }
+            //--------------------------------------
+            //--------------------------------------
             case ServerMessageType.REMOVED_FROM_GAME: {
               get().resetAllStates()
               router.dismissTo('/home')
               break
             }
+            //--------------------------------------
+            //--------------------------------------
             case ServerMessageType.REMOVED_FROM_QUEUE: {
               get().resetAllStates()
               router.dismissTo('/home')
               break
             }
+            //--------------------------------------
+            //--------------------------------------
             case ServerMessageType.ERROR: {
               const { content } = message as ErrorMessage
               set({ error: content.message })
               break
             }
+            //--------------------------------------
+            //--------------------------------------
             case ServerMessageType.OPPONENT_DISCONNECTED: {
               set({ gameState: GameState.OPPONENT_DISCONNECTED })
               break
             }
+            //--------------------------------------
+            //--------------------------------------
             case ServerMessageType.SERVER_DISCONNECTED: {
               set({ error: 'Server disconnected' })
               get().resetAllStates()
               router.dismissTo('/home')
               break
             }
+            //--------------------------------------
+            //--------------------------------------
             default: {
               console.error('Unknown message type', message)
             }

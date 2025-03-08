@@ -84,7 +84,6 @@ export async function getUserMarkIO(rl: readline.Interface, count = 0): Promise<
     rl.question('Choose player (x | o): ', line => {
       if (line !== 'x' && line !== 'o') {
         if (count < 3) {
-          console.log('you chose a wrong mark. please choose either an x or o.')
           const mark = getUserMarkIO(rl, count + 1)
           resolve(mark)
         } else {
