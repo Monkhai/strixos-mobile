@@ -42,6 +42,7 @@ export const useSingleGameStore = create<StoreType>()((set, get) => ({
   //----------------Actions---------------
   //--------------------------------------
   newGame(userMark: Mark) {
+    get().resetAllStates()
     const computerMark: Mark = userMark === 'o' ? 'x' : 'o'
     const game = new SingleGame(userMark, computerMark, getEmptyBoard())
     set({ game, gameState: SingleGameState.PLAYING, activePlayer: Player.USER, mark: userMark })

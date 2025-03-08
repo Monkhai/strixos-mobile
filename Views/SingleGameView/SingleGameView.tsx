@@ -4,14 +4,10 @@ import React, { useEffect } from 'react'
 import Board from '../GameView/components/Board/Board'
 import GameViewHeader from '../GameView/components/GameViewHeader/GameViewHeader'
 import SingleGameViewHeader from './components/SingleGameHeader/SingleGameHeader'
+import SingleGameViewFooter from './components/SingleGameFooter/SingleGameFooter'
+
 export default function SingleGameView() {
   const { board, activePlayer, gameState, playTurn, newGame, game } = useSingleGameStore()
-
-  useEffect(() => {
-    if (!game) {
-      newGame('x')
-    }
-  }, [game])
 
   return (
     <Screen>
@@ -26,7 +22,9 @@ export default function SingleGameView() {
           isPlaying={gameState === SingleGameState.PLAYING}
         />
       </Screen.Body>
-      <Screen.Footer></Screen.Footer>
+      <Screen.Footer>
+        <SingleGameViewFooter />
+      </Screen.Footer>
     </Screen>
   )
 }
