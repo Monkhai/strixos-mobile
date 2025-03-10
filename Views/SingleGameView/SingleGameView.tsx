@@ -5,22 +5,16 @@ import Board from '../GameView/components/Board/Board'
 import GameViewHeader from '../GameView/components/GameViewHeader/GameViewHeader'
 import SingleGameViewHeader from './components/SingleGameHeader/SingleGameHeader'
 import SingleGameViewFooter from './components/SingleGameFooter/SingleGameFooter'
+import SingleGameBody from './components/SingleGameBody/SingleGameBody'
 
 export default function SingleGameView() {
-  const { board, activePlayer, gameState, playTurn, newGame, game } = useSingleGameStore()
-
   return (
     <Screen>
       <Screen.Header>
         <SingleGameViewHeader />
       </Screen.Header>
       <Screen.Body>
-        <Board
-          board={board}
-          isDisabled={!game || gameState !== SingleGameState.PLAYING || activePlayer !== Player.USER}
-          onMove={playTurn}
-          isPlaying={gameState === SingleGameState.PLAYING}
-        />
+        <SingleGameBody />
       </Screen.Body>
       <Screen.Footer>
         <SingleGameViewFooter />

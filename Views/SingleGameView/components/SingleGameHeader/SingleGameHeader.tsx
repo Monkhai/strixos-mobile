@@ -25,7 +25,7 @@ function HeaderTitle() {
       return <SingleGamePlayingHeader />
     }
     default: {
-      return <ThemedText type="title">Game</ThemedText>
+      return <ThemedText type="title">Single Game</ThemedText>
     }
   }
 }

@@ -16,10 +16,10 @@ export default function GameLogo() {
   return (
     <Animated.View style={[{ flexDirection: 'row', width: 150, height: 120 }, animatedStyle]}>
       <View style={{ position: 'absolute', left: -15 }}>
-        <XCell dying={false} containerSize={50} />
+        <XCell dying={false} containerSize={50} isPlaying={false} />
       </View>
       <View style={{ position: 'absolute', right: -15 }}>
-        <OCell dying={false} containerSize={50} />
+        <OCell dying={false} containerSize={50} isPlaying={false} />
       </View>
     </Animated.View>
   )

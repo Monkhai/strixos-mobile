@@ -120,6 +120,7 @@ export default function UIButton({
 export function TextButton({ label, type = 'primary', ...props }: Props & { label: string }) {
   const theme = useColorScheme() ?? 'light'
   const size = useSharedValue({ width: 0, height: 0 })
+
   const styles = StyleSheet.create({
     primary: {
       color: 'white',
@@ -198,5 +199,34 @@ export function IconButton({ rotate, style, ...props }: IconButtonProps) {
     <GestureDetector gesture={tap}>
       <AnimatedPressable onPressIn={handlePressIn} onPressOut={handlePressOut} style={[animatedStyle, style]} {...props} />
     </GestureDetector>
+  )
+}
+
+interface GenralButtonProps extends PressableProps {
+  children: ReactNode
+}
+export function GeneralButton({ children, ...props }: GenralButtonProps) {
+  const scale = useSharedValue(1)
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ scale: scale.value }],
+    }
+  })
+
+  function handlePressIn(e: GestureResponderEvent) {
+    impactAsync(ImpactFeedbackStyle.Light)
+    scale.value = withTiming(0.95)
+    props.onPressIn?.(e)
+  }
+
+  function handlePressOut(e: GestureResponderEvent) {
+    scale.value = withTiming(1)
+    props.onPressOut?.(e)
+  }
+
+  return (
+    <AnimatedPressable onPressIn={handlePressIn} onPressOut={handlePressOut} style={[animatedStyle, props.style]} {...props}>
+      {children}
+    </AnimatedPressable>
   )
 }

@@ -2,15 +2,13 @@ import DangerButton from '@/components/ui/buttons/DangerButton'
 import PrimaryButton from '@/components/ui/buttons/PrimaryButton'
 import SecondaryButton from '@/components/ui/buttons/SecondaryButton'
 import { GameState } from '@/server/gameTypes'
-import { ClientMessageType } from '@/server/messageTypes'
-import { useGlobalStore } from '@/stores/globalStore'
 import { SingleGameState, useSingleGameStore } from '@/stores/singleGameStore'
 import { router } from 'expo-router'
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
 
 export default function SingleGameViewFooter() {
-  const { gameState, resetAllStates, newGame } = useSingleGameStore()
+  const { gameState, resetAllStates } = useSingleGameStore()
 
   switch (gameState) {
     case SingleGameState.FINISHED: {
@@ -34,7 +32,13 @@ export default function SingleGameViewFooter() {
     case SingleGameState.NONE: {
       return (
         <View>
-          <PrimaryButton onPress={() => newGame('x')} wide label="Start" />
+          <DangerButton
+            onPress={() => {
+              resetAllStates()
+              router.dismissTo('/home')
+            }}
+            label="Leave"
+          />
         </View>
       )
     }
@@ -42,7 +46,7 @@ export default function SingleGameViewFooter() {
 }
 
 function GameFinsihedFooter() {
-  const { gameState, resetAllStates, newGame } = useSingleGameStore()
+  const { newGame } = useSingleGameStore()
 
   function handlePlayAgain() {
     newGame('x')
