@@ -66,52 +66,36 @@ export const useSingleGameStore = create<StoreType>()((set, get) => ({
 
     const point: Point = [row as ValidIndex, col as ValidIndex]
 
-    //make move
     const isValid = game.makeUserMove(point)
     if (!isValid) {
       return
     }
     game.updateLives()
     set({ board: game.getBoard() })
-    // check if user won
     const userWon = game.checkWin(game.getUserMark())
-    // // if yes, break
     if (userWon) {
       set({ gameState: SingleGameState.FINISHED, gameWinner: Player.USER })
       return
     }
-
-    // check if board is full
     if (game.isBoardFull()) {
       set({ gameState: SingleGameState.FINISHED })
       return
     }
 
-    // switch to computer
     set({ activePlayer: Player.COMPUTER })
-    // sleep for 1 second to simulate computer thinking
     await sleep(1)
-
-    // make computer move
     game.makeComputerMove()
-    // update lives
     game.updateLives()
-    // update board
     set({ board: game.getBoard() })
-    // check if computer won
     const computerWon = game.checkWin(game.getComputerMark())
-    // // if yes, break
     if (computerWon) {
       set({ gameState: SingleGameState.FINISHED })
     }
-    // check if draw (board full)
     const isDraw = game.isBoardFull()
-    // // if yes, break
     if (isDraw) {
       set({ gameState: SingleGameState.FINISHED })
     }
 
-    // switch to user
     set({ activePlayer: Player.USER })
   },
   //--------------------------------------
