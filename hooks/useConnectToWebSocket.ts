@@ -16,17 +16,14 @@ export function useConnectToWebSocket() {
     // Only run initial setup once
     if (isInitialSetupDone.current) return
 
-    console.log('[useConnectToWebSocket] Initial setup, connectionState:', connectionState)
     isInitialSetupDone.current = true
 
     // If we don't have a WebSocket handler yet, create one
     if (!ws) {
-      console.log('[useConnectToWebSocket] No WebSocket handler exists, creating one')
       createWSConnection(0)
     } else if (connectionState !== 1 && connectionState !== 0) {
       // Not OPEN or CONNECTING
       // We have a handler but it's not connected or connecting
-      console.log('[useConnectToWebSocket] Handler exists but not connected, connecting to:', WS_URL)
       ws.connect(WS_URL)
     }
   }, [ws, connectionState, createWSConnection])
@@ -38,13 +35,6 @@ export function useConnectToWebSocket() {
 
     // Only attempt reconnect if we have a WS handler, it's closed, and we haven't exceeded max attempts
     if (ws && connectionState === 3 && reconnectionAttempts < MAX_RECONNECTION_ATTEMPTS) {
-      // CLOSED
-      console.log(
-        `[useConnectToWebSocket] Connection closed, attempting to reconnect (attempt ${
-          reconnectionAttempts + 1
-        }/${MAX_RECONNECTION_ATTEMPTS})`
-      )
-
       // Add exponential backoff for reconnection
       const delay = 1000 * Math.pow(2, reconnectionAttempts)
       const reconnectTimer = setTimeout(() => {
@@ -52,8 +42,6 @@ export function useConnectToWebSocket() {
       }, delay)
 
       return () => clearTimeout(reconnectTimer)
-    } else if (reconnectionAttempts >= MAX_RECONNECTION_ATTEMPTS) {
-      console.log('[useConnectToWebSocket] Maximum reconnection attempts reached, giving up')
     }
   }, [connectionState, ws, reconnectionAttempts])
 }

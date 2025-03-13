@@ -1,5 +1,5 @@
 import { Point, sleep, ValidIndex } from '@/lib/singleGame/helpers'
-import { SingleGame } from '@/lib/singleGame/singleGame'
+import { SingleGame, SingleGameDifficulty } from '@/lib/singleGame/singleGame'
 import { Board, Mark } from '@/server/gameTypes'
 import { getEmptyBoard } from '@/Views/GameView/components/Board/utils'
 import { create } from 'zustand'
@@ -23,7 +23,7 @@ interface StoreType {
   board: Board
   gameWinner: Player | null
 
-  newGame: (userMark: Mark) => void
+  newGame: (userMark: Mark, difficulty: SingleGameDifficulty) => void
   playTurn: (row: number, col: number) => Promise<void>
   resetAllStates: () => void
 }
@@ -39,10 +39,10 @@ export const useSingleGameStore = create<StoreType>()((set, get) => ({
   //--------------------------------------
   //----------------Actions---------------
   //--------------------------------------
-  async newGame(userMark: Mark) {
+  async newGame(userMark: Mark, difficulty: SingleGameDifficulty) {
     get().resetAllStates()
     const computerMark: Mark = userMark === 'o' ? 'x' : 'o'
-    const game = new SingleGame(userMark, computerMark, getEmptyBoard())
+    const game = new SingleGame(userMark, computerMark, getEmptyBoard(), difficulty)
     const players = [Player.USER, Player.COMPUTER]
     const activePlayer = players[Math.floor(Math.random() * players.length)]
     set({ game, gameState: SingleGameState.PLAYING, activePlayer, mark: userMark })

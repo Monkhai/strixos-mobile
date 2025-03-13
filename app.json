@@ -12,7 +12,13 @@
       "supportsTablet": false,
       "bundleIdentifier": "com.yohaiwiener.strixos",
       "buildNumber": "2.0.0",
-      "associatedDomains": ["applinks:play.strixos.app"]
+      "associatedDomains": [
+        "applinks:play.strixos.app",
+        "applinks:play.strixos.app"
+      ],
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "versionCode": 5,
@@ -32,7 +38,10 @@
               "pathPrefix": "/"
             }
           ],
-          "category": ["BROWSABLE", "DEFAULT"]
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
         }
       ]
     },
@@ -56,7 +65,9 @@
       [
         "expo-font",
         {
-          "fonts": ["./assets/fonts/BakbakOne-Regular.ttf"]
+          "fonts": [
+            "./assets/fonts/BakbakOne-Regular.ttf"
+          ]
         }
       ]
     ],

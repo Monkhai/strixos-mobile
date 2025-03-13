@@ -111,7 +111,7 @@ export default function UIButton({
           />
         </Rect>
       </Canvas>
-      <>{children}</>
+      {children as ReactNode}
       <View style={{ position: 'absolute', right: 20 }}>{isLoading ? <Loader size={24} /> : suffix}</View>
     </AnimatedPressable>
   )
@@ -205,7 +205,7 @@ export function IconButton({ rotate, style, ...props }: IconButtonProps) {
 interface GenralButtonProps extends PressableProps {
   children: ReactNode
 }
-export function GeneralButton({ children, ...props }: GenralButtonProps) {
+export function GeneralButton({ children, style, ...props }: GenralButtonProps) {
   const scale = useSharedValue(1)
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -225,7 +225,7 @@ export function GeneralButton({ children, ...props }: GenralButtonProps) {
   }
 
   return (
-    <AnimatedPressable onPressIn={handlePressIn} onPressOut={handlePressOut} style={[animatedStyle, props.style]} {...props}>
+    <AnimatedPressable onPressIn={handlePressIn} onPressOut={handlePressOut} style={[animatedStyle, style]} {...props}>
       {children}
     </AnimatedPressable>
   )

@@ -1,7 +1,8 @@
 import DangerButton from '@/components/ui/buttons/DangerButton'
 import PrimaryButton from '@/components/ui/buttons/PrimaryButton'
 import SecondaryButton from '@/components/ui/buttons/SecondaryButton'
-import { GameState } from '@/server/gameTypes'
+import { SingleGameDifficulty } from '@/lib/singleGame/singleGame'
+import { GameState, Mark } from '@/server/gameTypes'
 import { SingleGameState, useSingleGameStore } from '@/stores/singleGameStore'
 import { router } from 'expo-router'
 import React from 'react'
@@ -46,13 +47,16 @@ export default function SingleGameViewFooter() {
 }
 
 function GameFinsihedFooter() {
-  const { newGame } = useSingleGameStore()
+  const { newGame, resetAllStates } = useSingleGameStore()
 
   function handlePlayAgain() {
-    newGame('x')
+    const marks: Array<Mark> = ['x', 'o']
+    const randomMark = marks[Math.floor(Math.random() * marks.length)]
+    newGame(randomMark, SingleGameDifficulty.MEDIUM)
   }
 
   function handleBackHome() {
+    resetAllStates()
     router.replace('/home')
   }
 

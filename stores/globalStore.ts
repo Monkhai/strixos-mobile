@@ -152,10 +152,8 @@ export const useGlobalStore = create<StoreType>()((set, get) => ({
     // Don't create a new connection if one already exists
     const existingWs = get().ws
     if (existingWs) {
-      console.log('[Store] WebSocket handler already exists, not creating new one')
       // If there's an existing handler but it's closed, try to reconnect
       if (existingWs.getReadyState() === WebSocket.CLOSED) {
-        console.log('[Store] Existing WebSocket is closed, attempting to reconnect')
         const err = existingWs.connect(WS_URL)
         if (err) {
           console.error('[Store] Error reconnecting:', err)
@@ -164,7 +162,6 @@ export const useGlobalStore = create<StoreType>()((set, get) => ({
       return
     }
 
-    console.log('[Store] Creating new WebSocketHandler')
     const ws = new WebSocketHandler({
       onError() {
         set({
@@ -180,8 +177,6 @@ export const useGlobalStore = create<StoreType>()((set, get) => ({
         })
       },
       onClose() {
-        console.log('[Store] WebSocket connection closed')
-
         const currentAttempts = get().reconnectionAttempts || 0
         set({
           connectionState: WebSocket.CLOSED,

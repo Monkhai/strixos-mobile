@@ -1,23 +1,25 @@
-import { getEmptyBoard, INITIAL_LIVES, markLives, type Board, type Cell, type Mark, type Point } from './helpers'
-import { SingleGame } from './singleGame'
+import { Board, Cell } from '@/server/gameTypes'
+import { getEmptyBoard, INITIAL_LIVES, markLives, type Mark, type Point } from './helpers'
+import { SingleGame, SingleGameDifficulty } from './singleGame'
 import { isDeepStrictEqual } from 'node:util'
 
-const xCell: Cell = { mark: 'x', lives: INITIAL_LIVES }
-const oCell: Cell = { mark: 'o', lives: INITIAL_LIVES }
+const xCell: Cell = { value: 'x', lives: INITIAL_LIVES, winState: false }
+const oCell: Cell = { value: 'o', lives: INITIAL_LIVES, winState: false }
+const emptyCell: Cell = { value: '-', lives: INITIAL_LIVES, winState: false }
 
 function getCellWithLives(mark: Mark, lives: keyof typeof markLives): Cell {
-  return { lives, mark }
+  return { value: mark, lives, winState: false }
 }
 
 test('new Game()', () => {
-  const game = new SingleGame('x', 'o', getEmptyBoard())
+  const game = new SingleGame('x', 'o', getEmptyBoard(), SingleGameDifficulty.EASY)
 
   expect(game.getUserMark()).toBe('x')
   expect(game.getComputerMark()).toBe('o')
   const board = game.getBoard()
   board.forEach(row => {
     row.forEach(cell => {
-      expect(cell).toBe(null)
+      expect(cell.value).toBe('-')
     })
   })
 })
@@ -27,21 +29,21 @@ test('game.getBoard', () => {
     { expectedBoard: getEmptyBoard() },
     {
       expectedBoard: [
-        [null, null, null],
-        [null, { mark: 'x', lives: 3 }, null],
-        [null, null, null],
+        [emptyCell, emptyCell, emptyCell],
+        [emptyCell, xCell, emptyCell],
+        [emptyCell, emptyCell, emptyCell],
       ],
     },
     {
       expectedBoard: [
-        [null, { mark: 'x', lives: 3 }, null],
-        [null, { mark: 'o', lives: 3 }, null],
-        [null, null, { mark: 'o', lives: 3 }],
+        [emptyCell, xCell, emptyCell],
+        [emptyCell, oCell, emptyCell],
+        [emptyCell, emptyCell, oCell],
       ],
     },
   ]
   tests.forEach(({ expectedBoard }) => {
-    const game = new SingleGame('x', 'o', expectedBoard)
+    const game = new SingleGame('x', 'o', expectedBoard, SingleGameDifficulty.EASY)
     const gameBoard = game.getBoard()
     expect(isDeepStrictEqual(gameBoard, expectedBoard)).toBe(true)
   })
@@ -54,32 +56,32 @@ test('game.makeComputerMove', () => {
   }> = [
     {
       initialBoard: [
-        [oCell, oCell, null],
-        [null, xCell, xCell],
-        [null, xCell, null],
+        [oCell, oCell, emptyCell],
+        [emptyCell, xCell, xCell],
+        [emptyCell, xCell, emptyCell],
       ],
       expectedBoard: [
         [oCell, oCell, oCell],
-        [null, xCell, xCell],
-        [null, xCell, null],
+        [emptyCell, xCell, xCell],
+        [emptyCell, xCell, emptyCell],
       ],
     },
     {
       initialBoard: [
-        [oCell, null, null],
-        [null, xCell, xCell],
-        [null, null, null],
+        [oCell, emptyCell, emptyCell],
+        [emptyCell, xCell, xCell],
+        [emptyCell, emptyCell, emptyCell],
       ],
       expectedBoard: [
-        [oCell, null, null],
+        [oCell, emptyCell, emptyCell],
         [oCell, xCell, xCell],
-        [null, null, null],
+        [emptyCell, emptyCell, emptyCell],
       ],
     },
   ]
 
   tests.forEach((t, i) => {
-    const game = new SingleGame('x', 'o', t.initialBoard)
+    const game = new SingleGame('x', 'o', t.initialBoard, SingleGameDifficulty.EASY)
 
     game.makeComputerMove()
     const board = game.getBoard()
@@ -98,9 +100,9 @@ test('game.makeUserMove', () => {
       point: [0, 0],
       initialBoard: getEmptyBoard(),
       expectedBoard: [
-        [xCell, null, null],
-        [null, null, null],
-        [null, null, null],
+        [xCell, emptyCell, emptyCell],
+        [emptyCell, emptyCell, emptyCell],
+        [emptyCell, emptyCell, emptyCell],
       ],
       isValidPoint: true,
     },
@@ -108,9 +110,9 @@ test('game.makeUserMove', () => {
       point: [1, 1],
       initialBoard: getEmptyBoard(),
       expectedBoard: [
-        [null, null, null],
-        [null, xCell, null],
-        [null, null, null],
+        [emptyCell, emptyCell, emptyCell],
+        [emptyCell, xCell, emptyCell],
+        [emptyCell, emptyCell, emptyCell],
       ],
       isValidPoint: true,
     },
@@ -118,30 +120,30 @@ test('game.makeUserMove', () => {
       point: [2, 2],
       initialBoard: getEmptyBoard(),
       expectedBoard: [
-        [null, null, null],
-        [null, null, null],
-        [null, null, xCell],
+        [emptyCell, emptyCell, emptyCell],
+        [emptyCell, emptyCell, emptyCell],
+        [emptyCell, emptyCell, xCell],
       ],
       isValidPoint: true,
     },
     {
       point: [0, 0],
       initialBoard: [
-        [xCell, null, null],
-        [null, null, null],
-        [null, null, null],
+        [xCell, emptyCell, emptyCell],
+        [emptyCell, emptyCell, emptyCell],
+        [emptyCell, emptyCell, emptyCell],
       ],
       expectedBoard: [
-        [xCell, null, null],
-        [null, null, null],
-        [null, null, null],
+        [xCell, emptyCell, emptyCell],
+        [emptyCell, emptyCell, emptyCell],
+        [emptyCell, emptyCell, emptyCell],
       ],
       isValidPoint: false,
     },
   ]
 
   tests.forEach(t => {
-    const game = new SingleGame('x', 'o', t.initialBoard)
+    const game = new SingleGame('x', 'o', t.initialBoard, SingleGameDifficulty.EASY)
 
     const isValid = game.makeUserMove(t.point)
     expect(isValid).toBe(t.isValidPoint)
@@ -156,7 +158,7 @@ test('game.isBoardFull', () => {
       board: [
         [xCell, oCell, xCell],
         [xCell, oCell, oCell],
-        [oCell, null, xCell],
+        [oCell, emptyCell, xCell],
       ],
       expected: false,
     },
@@ -170,7 +172,7 @@ test('game.isBoardFull', () => {
     },
   ]
   tests.forEach(({ board, expected }) => {
-    const game = new SingleGame('x', 'o', board)
+    const game = new SingleGame('x', 'o', board, SingleGameDifficulty.EASY)
     expect(game.isBoardFull()).toBe(expected)
   })
 })
@@ -181,7 +183,7 @@ test('game.checkWin', () => {
       board: [
         [xCell, oCell, xCell],
         [xCell, oCell, oCell],
-        [oCell, null, xCell],
+        [oCell, emptyCell, xCell],
       ],
       mark: 'x',
       expected: false,
@@ -189,15 +191,15 @@ test('game.checkWin', () => {
     {
       board: [
         [xCell, oCell, xCell],
-        [null, oCell, oCell],
-        [null, oCell, xCell],
+        [emptyCell, oCell, oCell],
+        [emptyCell, oCell, xCell],
       ],
       mark: 'o',
       expected: true,
     },
   ]
   tests.forEach(({ board, expected, mark }) => {
-    const game = new SingleGame('x', 'o', board)
+    const game = new SingleGame('x', 'o', board, SingleGameDifficulty.EASY)
     expect(game.checkWin(mark)).toBe(expected)
   })
 })
@@ -206,43 +208,43 @@ test('game.updateLives', () => {
   const tests: Array<{ initialBoard: Board; expected: Board }> = [
     {
       initialBoard: [
-        [null, null, null],
-        [null, null, null],
-        [null, null, null],
+        [emptyCell, emptyCell, emptyCell],
+        [emptyCell, emptyCell, emptyCell],
+        [emptyCell, emptyCell, emptyCell],
       ],
       expected: [
-        [null, null, null],
-        [null, null, null],
-        [null, null, null],
+        [emptyCell, emptyCell, emptyCell],
+        [emptyCell, emptyCell, emptyCell],
+        [emptyCell, emptyCell, emptyCell],
       ],
     },
     {
       initialBoard: [
-        [getCellWithLives('x', 7), null, null],
-        [null, null, null],
-        [null, null, null],
+        [getCellWithLives('x', 6), emptyCell, emptyCell],
+        [emptyCell, emptyCell, emptyCell],
+        [emptyCell, emptyCell, emptyCell],
       ],
       expected: [
-        [getCellWithLives('x', 6), null, null],
-        [null, null, null],
-        [null, null, null],
+        [getCellWithLives('x', 5), emptyCell, emptyCell],
+        [emptyCell, emptyCell, emptyCell],
+        [emptyCell, emptyCell, emptyCell],
       ],
     },
     {
       initialBoard: [
-        [getCellWithLives('x', 1), null, null],
-        [null, null, null],
-        [null, null, null],
+        [getCellWithLives('x', 1), emptyCell, emptyCell],
+        [emptyCell, emptyCell, emptyCell],
+        [emptyCell, emptyCell, emptyCell],
       ],
       expected: [
-        [null, null, null],
-        [null, null, null],
-        [null, null, null],
+        [getCellWithLives('x', 0), emptyCell, emptyCell],
+        [emptyCell, emptyCell, emptyCell],
+        [emptyCell, emptyCell, emptyCell],
       ],
     },
   ]
   tests.forEach(({ initialBoard, expected }) => {
-    const game = new SingleGame('x', 'o', initialBoard)
+    const game = new SingleGame('x', 'o', initialBoard, SingleGameDifficulty.EASY)
     game.updateLives()
     expect(isDeepStrictEqual(expected, initialBoard)).toBe(true)
   })
