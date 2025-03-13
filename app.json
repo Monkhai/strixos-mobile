@@ -2,7 +2,7 @@
   "expo": {
     "name": "strixos",
     "slug": "strixos",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "strixos",
@@ -11,17 +11,14 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.yohaiwiener.strixos",
-      "buildNumber": "2.0.0",
-      "associatedDomains": [
-        "applinks:play.strixos.app",
-        "applinks:play.strixos.app"
-      ],
+      "buildNumber": "2.0.1",
+      "associatedDomains": ["applinks:play.strixos.app"],
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
-      "versionCode": 5,
+      "versionCode": 6,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -38,10 +35,7 @@
               "pathPrefix": "/"
             }
           ],
-          "category": [
-            "BROWSABLE",
-            "DEFAULT"
-          ]
+          "category": ["BROWSABLE", "DEFAULT"]
         }
       ]
     },
@@ -65,9 +59,7 @@
       [
         "expo-font",
         {
-          "fonts": [
-            "./assets/fonts/BakbakOne-Regular.ttf"
-          ]
+          "fonts": ["./assets/fonts/BakbakOne-Regular.ttf"]
         }
       ]
     ],
