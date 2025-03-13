@@ -2,7 +2,7 @@
   "expo": {
     "name": "strixos",
     "slug": "strixos",
-    "version": "2.0.1",
+    "version": "2.0.2",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "strixos",
@@ -11,7 +11,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.yohaiwiener.strixos",
-      "buildNumber": "2.0.1",
+      "buildNumber": "2.0.2",
       "associatedDomains": ["applinks:play.strixos.app"],
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
