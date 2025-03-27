@@ -1,18 +1,5 @@
 import { Board, Mark } from '@/server/gameTypes'
-import {
-  checkColWin,
-  checkDiagonalWin,
-  checkRowWin,
-  checkWin,
-  formatBoard,
-  getAvailablePoints,
-  getUpdatedBoard,
-  INITIAL_LIVES,
-  isBoardEmpty,
-  isBoardFull,
-  minMax,
-  type Point,
-} from './helpers'
+import { checkWin, getAvailablePoints, getUpdatedBoard, INITIAL_LIVES, isBoardEmpty, isBoardFull, minMax, type Point } from './helpers'
 
 export enum SingleGameDifficulty {
   EASY = 'easy',

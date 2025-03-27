@@ -1,4 +1,4 @@
-import { Board } from '@/server/gameTypes'
+import { Board, Cell, Row } from '@/server/gameTypes'
 import * as readline from 'node:readline'
 
 export type Tilt = 'for' | 'against'
@@ -192,12 +192,17 @@ export function minMax(board: Board, mark: Mark, tilt: Tilt): number {
   const points = getAvailablePoints(board)
   points.forEach(point => {
     const newMark: Mark = mark === 'o' ? 'x' : 'o'
-    const newBoard: Board = getUpdatedBoard(board, point, newMark)
+    let newBoard: Board = getUpdatedBoard(board, point, newMark)
+    newBoard = decrementLives(newBoard)
     const newTilt: Tilt = tilt === 'for' ? 'against' : 'for'
     score += minMax(newBoard, newMark, newTilt)
   })
 
   return score
+}
+
+function decrementLives(board: Board): Board {
+  return board.map(row => row.map(cell => ({ ...cell, lives: cell.lives - 1 }))) as Board
 }
 
 export function isBoardEmpty(board: Board) {
